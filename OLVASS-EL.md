@@ -24,8 +24,8 @@ Telepítés után nyisd meg egyszer net mellett, így a határozó elmentődik o
 
 - **Helyszín:** a helyszínkártyán nyomd meg a **Saját helyzetem (GPS)** gombot, és engedélyezd a helymeghatározást. Térképkoppintással, településsel vagy koordinátával is megadhatod.
 - **Határozó:** offline is működik.
-- **Fotós felismerés:** internet és saját Claude API-kulcs kell hozzá (console.anthropic.com › API Keys). A kulcs csak a telefonodon tárolódik, a díjat az API-fiókod terheli.
+- **Fotós felismerés:** internet és saját Claude API-kulcs kell hozzá (platform.claude.com › Settings › API Keys). A kulcs csak a telefonodon tárolódik, a díjat az API-fiókod terheli.
 
 ## Frissítés
 
-Ha új változatot töltesz fel, írd át az `sw.js` első sorában a `fafel-v1` értéket (pl. `fafel-v2`-re), különben a telefon a régit mutathatja.
+Ha új változatot töltesz fel, írd át az `sw.js` első sorában a `fafel-v…` értéket egy számmal feljebb, különben a telefon a régit mutathatja.
