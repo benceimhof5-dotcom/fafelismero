@@ -310,8 +310,9 @@ body.locked{overflow:hidden}
           <small>A fotós felismerés a saját Claude API-kulcsoddal működik (platform.claude.com › Settings › API Keys). A kulcs csak ezen a telefonon tárolódik. A használat díját az API-fiókod terheli, ez független a Claude-előfizetéstől. Kulcs nélkül a Határozó fül teljesen használható.</small><div class="msg" id="keyMsg"></div></div></div>
         <div class="ctx" id="keyok" hidden>API-kulcs elmentve ezen a telefonon. <button class="link" id="keyDel" type="button">Kulcs törlése</button></div>
         <div class="drop" id="drop">
+          <input type="file" id="pcam" accept="image/*" capture="environment">
           <input type="file" id="pfile" accept="image/*" multiple>
-          <label for="pfile" class="btn primary">Fotó készítése vagy kiválasztása</label>
+          <div class="inline" style="justify-content:center;flex-wrap:wrap"><label for="pcam" class="btn primary">Fotó készítése</label><label for="pfile" class="btn">Galériából</label></div>
           <small style="color:var(--muted)">Legfeljebb 3 kép · levél, kéreg, termés</small>
         </div>
         <div class="thumbs" id="thumbs"></div>
@@ -1536,6 +1537,7 @@ pnote.addEventListener('input',updGo);
 function addFiles(list){for(const f of list){if(!f.type.startsWith('image/'))continue;if(files.length>=maxImgs)break;files.push(f)}renderThumbs();updGo()}
 function renderThumbs(){thumbs.innerHTML='';files.forEach((f,i)=>{const d=document.createElement('div');d.className='thumb';const u=URL.createObjectURL(f);d.innerHTML=`<img alt="Fotó ${i+1}"><button type="button" aria-label="Kép eltávolítása">×</button>`;d.querySelector('img').src=u;d.querySelector('img').onload=()=>URL.revokeObjectURL(u);d.querySelector('button').addEventListener('click',()=>{files.splice(i,1);renderThumbs();updGo()});thumbs.appendChild(d)})}
 pfile.addEventListener('change',()=>{addFiles(pfile.files);pfile.value=''});
+const pcam=document.getElementById('pcam');pcam.addEventListener('change',()=>{addFiles(pcam.files);pcam.value=''});
 ['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));
 drop.addEventListener('drop',e=>addFiles(e.dataTransfer.files));
@@ -1681,10 +1683,11 @@ async function renderOwn(sp){
   if(cur!==sp)return;
   const grid=list.map(x=>{const u=URL.createObjectURL(x.blob);ownUrls.push(u);const d=new Date(x.date);return `<div class="own-item"><img src="${u}" alt="Saját fotó" data-id="${x.id}"><time>${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}.</time><button type="button" data-del="${x.id}">Törlés</button></div>`}).join('');
   box.innerHTML=`<h3>Saját fotóid</h3>${list.length?`<div class="own-grid">${grid}</div>`:'<small>Még nincs saját fotód erről a fajról. Ha találsz egyet, fotózd le, és itt elmentheted.</small>'}
-    <div class="inline" style="align-items:center;flex-wrap:wrap"><label class="btn" for="ownIn">Fotó hozzáadása</label><input id="ownIn" type="file" accept="image/*" multiple hidden><small>A fotók csak ezen a telefonon tárolódnak.</small></div>`;
+    <div class="inline" style="align-items:center;flex-wrap:wrap"><label class="btn primary" for="ownCam">Fotó készítése</label><input id="ownCam" type="file" accept="image/*" capture="environment" hidden><label class="btn" for="ownIn">Galériából</label><input id="ownIn" type="file" accept="image/*" multiple hidden><small>A fotók csak ezen a telefonon tárolódnak.</small></div>`;
   box.querySelectorAll('img[data-id]').forEach(im=>im.addEventListener('click',()=>{const x=list.find(y=>y.id==im.dataset.id);if(x)openLb(x.blob)}));
   box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',async()=>{if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Biztos?';setTimeout(()=>{if(b.isConnected){b.dataset.armed='';b.textContent='Törlés'}},3000);return}await ownDel(+b.dataset.del,sp);renderOwn(sp);render()}));
-  box.querySelector('#ownIn').addEventListener('change',async e=>{const fs=[...e.target.files];e.target.value='';for(const f of fs){try{await ownAdd(sp,await toJpegBlob(f))}catch(err){}}renderOwn(sp);render()});
+  const addOwn=async e=>{const fs=[...e.target.files];e.target.value='';for(const f of fs){try{await ownAdd(sp,await toJpegBlob(f))}catch(err){}}renderOwn(sp);render()};
+  box.querySelector('#ownIn').addEventListener('change',addOwn);box.querySelector('#ownCam').addEventListener('change',addOwn);
 }
 
 /* ---------- Offline működés ---------- */
