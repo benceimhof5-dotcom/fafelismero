@@ -135,6 +135,29 @@ header.top p{margin:4px 0 0;color:var(--muted);max-width:58ch}
 .step-q small{color:var(--muted);font-weight:400}
 .pill.pn{background:var(--ochre);color:var(--surface)}
 .card .pill{position:absolute;top:8px;left:8px}
+.card .ownmark{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+.card .ownmark svg{width:15px;height:15px}
+.card .ownmark path,.card .ownmark circle{fill:none;stroke:var(--accent-ink);stroke-width:2}
+.phs{display:grid;gap:10px}
+.phs h3,.own h3{font-size:20px}
+.ph-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.ph-fig{margin:0;display:grid;gap:6px}
+.ph-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:var(--sheet);border:1px solid var(--line);display:block}
+.ph-empty{aspect-ratio:4/3;border-radius:8px;border:1px dashed var(--line);display:grid;place-items:center;text-align:center;color:var(--muted);font-size:14px;padding:16px}
+.ph-cap{font-size:12px;color:var(--muted);line-height:1.4}
+.ph-cap a{color:var(--muted)}
+.ph-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.own{display:grid;gap:10px}
+.own-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.own-item{position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1}
+.own-item img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
+.own-item button{position:absolute;bottom:4px;right:4px;border:none;border-radius:6px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;padding:3px 7px;cursor:pointer}
+.own-item time{position:absolute;top:4px;left:4px;font-size:11px;color:#fff;background:rgba(0,0,0,.5);border-radius:4px;padding:1px 5px}
+.own small{color:var(--muted);font-size:13px}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.88);display:grid;place-items:center;z-index:40;padding:16px}
+.lb img{max-width:100%;max-height:100%;border-radius:6px}
+.lb button{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:12px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;font-size:22px;cursor:pointer}
+.savemsg{font-size:13px;color:var(--accent)}
 .group.dim .card{opacity:.72}
 
 /* SVG elemek */
@@ -324,6 +347,8 @@ body.locked{overflow:hidden}
 </div>
 
 <div class="overlay" id="ovDetail" hidden><div class="panel detail" role="dialog" aria-modal="true" aria-labelledby="d-name" id="pDetail"></div></div>
+
+<div class="lb" id="lb" hidden><img alt="Saját fotó nagyban"><button type="button" aria-label="Bezárás">×</button></div>
 
 <div class="overlay" id="ovLoc" hidden>
   <div class="panel locp" role="dialog" aria-modal="true" aria-labelledby="l-h">
@@ -1292,7 +1317,7 @@ const cards={};
 for(const t of T){
   const b=document.createElement('button');b.className='card';b.type='button';
   const tags=t.type==='tu'?'tűlevelű':`${ALLAS[t.allas]} · ${t.szel.map(s=>SZEL[s]).join(', ')}${t.type==='osszetett'?' · összetett':''}`;
-  b.innerHTML=`<div class="art"><span class="pill" hidden></span>${leafSVG(t.g,t.hu+' levelének rajza',[220,210])}</div><div class="txt"><span class="eyebrow">${t.fam.toLowerCase()}</span><h3>${t.hu}</h3><span class="la">${t.la}</span><span class="tags">${tags}</span></div>`;
+  b.innerHTML=`<div class="art"><span class="pill" hidden></span><span class="ownmark" hidden title="Van saját fotód"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>${leafSVG(t.g,t.hu+' levelének rajza',[220,210])}</div><div class="txt"><span class="eyebrow">${t.fam.toLowerCase()}</span><h3>${t.hu}</h3><span class="la">${t.la}</span><span class="tags">${tags}</span></div>`;
   b.addEventListener('click',()=>openDetail(t.id));cards[t.id]=b;
 }
 const chipBoxes={};
@@ -1307,7 +1332,7 @@ function group(title,sub,ids,dim){const g=document.createElement('div');g.classN
 function render(){
   const ids=T.filter(t=>match(t,F)).map(t=>t.id);
   resultsEl.innerHTML='';
-  for(const id of ids){const p=cards[id].querySelector('.pill');const s=st(id);if(!isNat(id)){p.hidden=false;p.className='pill pn';p.textContent='nem őshonos'}else if(s===null){p.hidden=true}else{p.hidden=false;p.className='pill p'+s;p.textContent=ST_TXT[s]}}
+  for(const id of ids){cards[id].querySelector('.ownmark').hidden=!OWN.has(id);const p=cards[id].querySelector('.pill');const s=st(id);if(!isNat(id)){p.hidden=false;p.className='pill pn';p.textContent='nem őshonos'}else if(s===null){p.hidden=true}else{p.hidden=false;p.className='pill p'+s;p.textContent=ST_TXT[s]}}
   const nn=ids.filter(id=>!isNat(id)),natIds=ids.filter(isNat);
   const hasC=(id,c)=>byId[id].ctx.includes(c);
   const toggle=(on,txtOn,txtOff,fn)=>{const n=document.createElement('div');n.className='notice';n.innerHTML=`<span>${on?txtOn:txtOff}</span><button class="btn" type="button">${on?'Elrejtés':'Megjelenítés'}</button>`;n.querySelector('button').addEventListener('click',fn);resultsEl.appendChild(n)};
@@ -1395,9 +1420,12 @@ function openDetail(id){
       ${isNat(id)?`<div><dt>tájegységek, ahol gyakori</dt><dd>${where.length?where.join(', '):'Sehol sem gyakori; szórványos vagy ritka faj.'}</dd></div>`:`<div><dt>státusz</dt><dd>Nem őshonos${t.inv?', invazív: terjed és kiszorítja a hazai fajokat. Ültetni nem ajánlott.':'; ültetve bárhol előfordulhat.'}</dd></div>`}
     </dl>
     <div class="tell"><b>Így ismered fel</b>${t.tell}</div>
+    <div class="phs" id="phBox"></div>
+    <div class="own" id="ownBox"></div>
     <div class="nav"><button class="btn" type="button" data-d="-1">← Előző</button><button class="btn" type="button" data-d="1">Következő →</button></div>
   </div>`;
   pD.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>stepDetail(+b.dataset.d)));
+  phKind='level';renderPhotos(t);renderOwn(t.id);
   openOv(ovD);pD.scrollTop=0;pD.querySelector('.close').focus();
 }
 function stepDetail(d){const list=visible.includes(cur)?visible:T.map(t=>t.id);let i=list.indexOf(cur);openDetail(list[(i+d+list.length)%list.length])}
@@ -1572,18 +1600,97 @@ function showResult(res){
       <div class="eyebrow">${i+1}. tipp</div><h3>${esc(t?t.hu:(x.nev||'Ismeretlen'))}</h3><span class="la" style="color:var(--muted)">${esc(t?t.la:(x.latin||''))}</span>
       <div class="row"><div class="bar" style="flex:1;min-width:80px"><i style="width:${p}%"></i></div><span>${p}%</span>${s!==null?`<span class="pill p${s}">${ST_TXT[s]}</span>`:''}${t&&!isNat(t.id)?NNPILL:''}${!t?'<span class="pill p0">nem őshonos vagy nincs a listán</span>':''}</div>
       ${x.indoklas?`<p>${esc(x.indoklas)}</p>`:''}
-      ${t?`<div><button class="btn" type="button" data-sheet="${t.id}">Fajlap megnyitása</button></div>`:''}
+      ${t?`<div class="inline" style="flex-wrap:wrap;align-items:center"><button class="btn" type="button" data-sheet="${t.id}">Fajlap megnyitása</button>${files.length?`<button class="btn" type="button" data-saveown="${t.id}">Fotóim mentése ehhez a fajhoz</button>`:''}<span class="savemsg"></span></div>`:''}
     </div></div>`});
   if(res?.javaslat)h+=`<div class="tip"><b>A biztos döntéshez:</b> ${esc(res.javaslat)}</div>`;
   h+='<p style="margin:0;font-size:13px;color:var(--muted)">A tipp becslés. Ellenőrizd a fajlapon az „Így ismered fel” bélyeget.</p>';
   pout.innerHTML=h;
   pout.querySelectorAll('[data-sheet]').forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.sheet)));
+  pout.querySelectorAll('[data-saveown]').forEach(b=>b.addEventListener('click',async()=>{const msg=b.parentElement.querySelector('.savemsg');b.disabled=true;
+    try{for(const f of files)await ownAdd(b.dataset.saveown,await toJpegBlob(f));msg.textContent='Elmentve a fajlapra.';render()}catch(e){msg.textContent='Nem sikerült menteni.';b.disabled=false}}));
+}
+
+
+/* ---------- Wikimedia Commons fotók ---------- */
+const COMMONS='https://commons.wikimedia.org/w/api.php';
+const KINDS={level:{n:'Levél',cats:['leaves','foliage','needles'],kw:'leaf'},kereg:{n:'Kéreg',cats:['bark','trunks'],kw:'bark'},termes:{n:'Termés',cats:['fruits','cones','acorns','nuts','seeds'],kw:'fruit'}};
+const COMMONS_NAME={verszilva:'Prunus cerasifera','magyar-koris':'Fraxinus angustifolia',szomorufuz:'Salix × sepulcralis','torekeny-fuz':'Salix × fragilis',platan:'Platanus × hispanica',nemesnyar:'Populus × canadensis'};
+let phKind='level';
+const cmBase=t=>COMMONS_NAME[t.id]||t.la.replace(/[‘'].*?[’']/g,'').replace(/ subsp\..*$/,'').trim();
+const stripHtml=h=>{const d=document.createElement('div');d.innerHTML=h||'';return (d.textContent||'').replace(/\s+/g,' ').trim()};
+async function cmQuery(extra){
+  const q=new URLSearchParams({action:'query',format:'json',origin:'*',prop:'imageinfo',iiprop:'url|extmetadata|mime',iiurlwidth:'800',iiextmetadatafilter:'Artist|LicenseShortName|LicenseUrl',...extra});
+  const r=await fetch(COMMONS+'?'+q.toString());if(!r.ok)throw new Error('http');
+  const j=await r.json();const pages=Object.values(j.query?.pages||{}).sort((a,b)=>(a.index||0)-(b.index||0));
+  return pages.map(pg=>{const ii=(pg.imageinfo||[])[0]||{},m=ii.extmetadata||{};return{mime:ii.mime||'',src:ii.thumburl||ii.url,page:ii.descriptionurl,artist:stripHtml(m.Artist?.value).slice(0,80),lic:stripHtml(m.LicenseShortName?.value),licUrl:m.LicenseUrl?.value||''}})
+    .filter(x=>x.src&&/image\/(jpeg|png|webp)/.test(x.mime));
+}
+async function cmFetch(t,kind){
+  const key='fafel-cm-'+t.id+'-'+kind;
+  try{const c=JSON.parse(localStorage.getItem(key)||'null');if(c&&Date.now()-c.at<30*864e5)return c.items}catch(e){}
+  const base=cmBase(t),K=KINDS[kind];let items=[];
+  for(const c of K.cats){items=await cmQuery({generator:'categorymembers',gcmtitle:`Category:${base} (${c})`,gcmtype:'file',gcmlimit:'10'});if(items.length)break}
+  if(!items.length)items=await cmQuery({generator:'search',gsrnamespace:'6',gsrsearch:`"${base}" ${K.kw}`,gsrlimit:'10'});
+  items=items.slice(0,8);
+  try{localStorage.setItem(key,JSON.stringify({at:Date.now(),items}))}catch(e){}
+  return items;
+}
+async function renderPhotos(t){
+  const box=document.getElementById('phBox');if(!box)return;
+  const tabs=Object.entries(KINDS).map(([k,v])=>`<button type="button" class="chip" aria-pressed="${k===phKind}" data-k="${k}">${v.n}</button>`).join('');
+  box.innerHTML=`<h3>Fotók</h3><div class="ph-tabs">${tabs}</div><div class="ph-body"><div class="ph-empty">Fotók betöltése…</div></div>`;
+  box.querySelectorAll('[data-k]').forEach(b=>b.addEventListener('click',()=>{phKind=b.dataset.k;renderPhotos(t)}));
+  const body=box.querySelector('.ph-body'),kind=phKind;
+  let items=[];
+  try{items=await cmFetch(t,kind)}catch(e){
+    if(cur!==t.id||phKind!==kind)return;
+    body.innerHTML=`<div class="ph-empty">${navigator.onLine?'A fotókat most nem sikerült betölteni a Wikimedia Commonsból.':'A fotókhoz internet kell. A rajz és a leírás offline is elérhető.'}</div>`;return}
+  if(cur!==t.id||phKind!==kind)return;
+  if(!items.length){body.innerHTML='<div class="ph-empty">Ehhez nem találtam fotót a Wikimedia Commonsban.</div>';return}
+  let i=0;
+  const show=()=>{const x=items[i];
+    body.innerHTML=`<figure class="ph-fig"><img class="ph-img" alt="${esc(t.hu)} – ${KINDS[kind].n.toLowerCase()}" loading="lazy" src="${esc(x.src)}"><figcaption class="ph-cap">Fotó: ${esc(x.artist||'ismeretlen szerző')}${x.lic?' · '+(x.licUrl?`<a href="${esc(x.licUrl)}" target="_blank" rel="noopener">${esc(x.lic)}</a>`:esc(x.lic)):''} · <a href="${esc(x.page)}" target="_blank" rel="noopener">Wikimedia Commons</a></figcaption></figure>
+      <div class="ph-row"><small style="color:var(--muted);font-size:13px">Nem mindig a legjobb kép jön elsőre.</small>${items.length>1?`<button class="link" type="button">Másik kép (${i+1}/${items.length})</button>`:''}</div>`;
+    const img=body.querySelector('img');img.onerror=()=>{items.splice(i,1);if(!items.length){body.innerHTML='<div class="ph-empty">A fotók nem töltődtek be.</div>';return}i=i%items.length;show()};
+    const nb=body.querySelector('.ph-row button');if(nb)nb.addEventListener('click',()=>{i=(i+1)%items.length;show()});
+  };
+  show();
+}
+
+/* ---------- Saját fotók (a telefonon, IndexedDB) ---------- */
+let idbP=null;const OWN=new Set();
+function idb(){if(idbP)return idbP;idbP=new Promise((res,rej)=>{const r=indexedDB.open('fafelismero',1);r.onupgradeneeded=()=>{const st=r.result.createObjectStore('photos',{keyPath:'id',autoIncrement:true});st.createIndex('sp','sp')};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});return idbP}
+const reqP=r=>new Promise((res,rej)=>{r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+async function ownList(sp){const d=await idb();return reqP(d.transaction('photos').objectStore('photos').index('sp').getAll(sp))}
+async function ownAdd(sp,blob){const d=await idb();await new Promise((res,rej)=>{const tx=d.transaction('photos','readwrite');tx.objectStore('photos').add({sp,blob,date:Date.now()});tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});OWN.add(sp);try{navigator.storage?.persist?.()}catch(e){}}
+async function ownDel(id,sp){const d=await idb();await new Promise((res,rej)=>{const tx=d.transaction('photos','readwrite');tx.objectStore('photos').delete(id);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});if(!(await ownList(sp)).length)OWN.delete(sp)}
+async function ownLoadIndex(){try{const d=await idb();const keys=await reqP(d.transaction('photos').objectStore('photos').index('sp').getAllKeys());const all=await reqP(d.transaction('photos').objectStore('photos').getAll());all.forEach(x=>OWN.add(x.sp));render()}catch(e){}}
+function toJpegBlob(file,max=1600){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),img=new Image();
+  img.onload=()=>{const sc=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement('canvas');c.width=Math.round(img.naturalWidth*sc);c.height=Math.round(img.naturalHeight*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?res(b):rej(new Error('kep')),'image/jpeg',.85)};
+  img.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('kep'))};img.src=u})}
+const lb=document.getElementById('lb');let lbUrl=null;
+function openLb(blob){if(lbUrl)URL.revokeObjectURL(lbUrl);lbUrl=URL.createObjectURL(blob);lb.querySelector('img').src=lbUrl;lb.hidden=false}
+function closeLb(){lb.hidden=true;if(lbUrl){URL.revokeObjectURL(lbUrl);lbUrl=null}}
+lb.addEventListener('click',closeLb);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden){e.stopImmediatePropagation();closeLb()}},true);
+let ownUrls=[];
+async function renderOwn(sp){
+  const box=document.getElementById('ownBox');if(!box)return;
+  ownUrls.forEach(u=>URL.revokeObjectURL(u));ownUrls=[];
+  let list=[];try{list=await ownList(sp)}catch(e){box.innerHTML='<h3>Saját fotóid</h3><small>A fotótár ezen az eszközön nem érhető el.</small>';return}
+  if(cur!==sp)return;
+  const grid=list.map(x=>{const u=URL.createObjectURL(x.blob);ownUrls.push(u);const d=new Date(x.date);return `<div class="own-item"><img src="${u}" alt="Saját fotó" data-id="${x.id}"><time>${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}.</time><button type="button" data-del="${x.id}">Törlés</button></div>`}).join('');
+  box.innerHTML=`<h3>Saját fotóid</h3>${list.length?`<div class="own-grid">${grid}</div>`:'<small>Még nincs saját fotód erről a fajról. Ha találsz egyet, fotózd le, és itt elmentheted.</small>'}
+    <div class="inline" style="align-items:center;flex-wrap:wrap"><label class="btn" for="ownIn">Fotó hozzáadása</label><input id="ownIn" type="file" accept="image/*" multiple hidden><small>A fotók csak ezen a telefonon tárolódnak.</small></div>`;
+  box.querySelectorAll('img[data-id]').forEach(im=>im.addEventListener('click',()=>{const x=list.find(y=>y.id==im.dataset.id);if(x)openLb(x.blob)}));
+  box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',async()=>{if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Biztos?';setTimeout(()=>{if(b.isConnected){b.dataset.armed='';b.textContent='Törlés'}},3000);return}await ownDel(+b.dataset.del,sp);renderOwn(sp);render()}));
+  box.querySelector('#ownIn').addEventListener('change',async e=>{const fs=[...e.target.files];e.target.value='';for(const f of fs){try{await ownAdd(sp,await toJpegBlob(f))}catch(err){}}renderOwn(sp);render()});
 }
 
 /* ---------- Offline működés ---------- */
 if('serviceWorker' in navigator&&location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 
-updKeyUI();updateLocUI();setCtx(CTX);
+updKeyUI();updateLocUI();setCtx(CTX);ownLoadIndex();
 
 </script>
 </body>
