@@ -22,7 +22,7 @@
 :root{
   --bg:#ECEFE8; --surface:#F7F9F3; --sheet:#FBFCF8; --ink:#1C271F; --muted:#56635A; --line:#C9D1C4;
   --accent:#2C5940; --accent-ink:#F2F7F0; --accent-soft:#DCE8DF; --ochre:#7F6213; --warn:#8A4B12;
-  --leaf:#6C9256; --leaf-edge:#3B5A30; --vein:#2C4426; --under:#DCE3D5; --twig:#6E533A; --aril:#C2362B; --seed:#2A2420;
+  --leaf:#6C9256; --leaf-edge:#3B5A30; --vein:#2C4426; --under:#DCE3D5; --twig:#6E533A; --aril:#C2362B; --seed:#2A2420; --leaf-red:#7B2D3B; --leaf-blue:#6E8F9C; --leaf-light:#93B56E;
   --map-1:#D5DFCF; --map-2:#C6D4C0; --map-3:#E0E5D6; --map-4:#CAD8D0; --map-line:#F7F9F3; --map-edge:#7D8C7F; --map-sel:#2C5940;
   --shadow:0 1px 2px rgba(28,39,31,.06),0 8px 24px rgba(28,39,31,.1);
   --f-display:"Alegreya",Georgia,"Times New Roman",serif;
@@ -32,13 +32,13 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#111612; --surface:#192019; --sheet:#151B16; --ink:#E1E8DC; --muted:#9AA79B; --line:#2D392F;
   --accent:#8EC2A0; --accent-ink:#0E1912; --accent-soft:#223429; --ochre:#D3B25E; --warn:#E3A266;
-  --leaf:#678F52; --leaf-edge:#A3C889; --vein:#22371D; --under:#BAC6B2; --twig:#A5845F; --aril:#E0564A; --seed:#1B1714;
+  --leaf:#678F52; --leaf-edge:#A3C889; --vein:#22371D; --under:#BAC6B2; --twig:#A5845F; --aril:#E0564A; --seed:#1B1714; --leaf-red:#8E3A4A; --leaf-blue:#8FB0BC; --leaf-light:#86A863;
   --map-1:#24302A; --map-2:#2B3830; --map-3:#202A23; --map-4:#2E3A36; --map-line:#151B16; --map-edge:#5F6F62; --map-sel:#8EC2A0;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.4); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111612; --surface:#192019; --sheet:#151B16; --ink:#E1E8DC; --muted:#9AA79B; --line:#2D392F;
   --accent:#8EC2A0; --accent-ink:#0E1912; --accent-soft:#223429; --ochre:#D3B25E; --warn:#E3A266;
-  --leaf:#678F52; --leaf-edge:#A3C889; --vein:#22371D; --under:#BAC6B2; --twig:#A5845F; --aril:#E0564A; --seed:#1B1714;
+  --leaf:#678F52; --leaf-edge:#A3C889; --vein:#22371D; --under:#BAC6B2; --twig:#A5845F; --aril:#E0564A; --seed:#1B1714; --leaf-red:#8E3A4A; --leaf-blue:#8FB0BC; --leaf-light:#86A863;
   --map-1:#24302A; --map-2:#2B3830; --map-3:#202A23; --map-4:#2E3A36; --map-line:#151B16; --map-edge:#5F6F62; --map-sel:#8EC2A0;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.4); color-scheme:dark}
 
@@ -126,6 +126,13 @@ header.top p{margin:4px 0 0;color:var(--muted);max-width:58ch}
 .pill.p2{background:var(--accent);color:var(--accent-ink)}
 .pill.p1{border:1px solid var(--accent);color:var(--accent)}
 .pill.p0{border:1px solid var(--line);color:var(--muted)}
+.blade.red{fill:var(--leaf-red)}
+.blade.light{fill:var(--leaf-light)}
+.hdr-r{display:grid;gap:8px;justify-items:start;min-width:0}
+.ctxsw{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface);gap:2px}
+.ctxsw button{border:none;background:none;padding:6px 12px;border-radius:999px;cursor:pointer;font-size:14px;color:var(--muted);font-weight:500}
+.ctxsw button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.step-q small{color:var(--muted);font-weight:400}
 .pill.pn{background:var(--ochre);color:var(--surface)}
 .card .pill{position:absolute;top:8px;left:8px}
 .group.dim .card{opacity:.72}
@@ -234,14 +241,17 @@ body.locked{overflow:hidden}
 <div class="wrap">
   <header class="top">
     <div>
-      <div class="eyebrow">33 őshonos és 12 gyakori nem őshonos fafaj</div>
+      <div class="eyebrow">79 fafaj · erdőben és településen</div>
       <h1>Erdei fafelismerő</h1>
       <p>Add meg, hol jársz, és a határozó előre veszi az ott jellemző fajokat. Fotóról is kérhetsz tippet.</p>
     </div>
+    <div class="hdr-r">
+    <div class="ctxsw" role="group" aria-label="Hol vagy?"><button type="button" data-ctx="erdo" aria-pressed="true">Erdőben</button><button type="button" data-ctx="varos" aria-pressed="false">Településen, parkban</button></div>
     <button class="loc none" id="locBtn" type="button" aria-label="Helyszín beállítása">
       <svg class="pin" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2C9.5 2 5.5 6.2 5.5 11.5 5.5 18.5 15 28 15 28s9.5-9.5 9.5-16.5C24.5 6.2 20.5 2 15 2Z"/><circle cx="15" cy="11.5" r="3.6"/></svg>
       <span class="loc-txt"><span id="locSmall">Helyszín</span><b id="locName">Még nincs megadva</b></span>
     </button>
+    </div>
   </header>
 
   <nav class="tabs" role="tablist">
@@ -257,7 +267,10 @@ body.locked{overflow:hidden}
         <div class="step"><div class="step-q"><span class="step-n">1</span><span>Milyen a levél?</span></div><div class="chips" data-f="type"></div></div>
         <div class="step"><div class="step-q"><span class="step-n">2</span><span>Hogyan állnak a levelek a hajtáson?</span></div><div class="chips" data-f="allas"></div></div>
         <div class="step"><div class="step-q"><span class="step-n">3</span><span>Milyen a levél (levélke) széle?</span></div><div class="chips" data-f="szel"></div></div>
-        <div class="step"><div class="step-q"><span class="step-n">4</span><span>Milyen az élőhely?</span></div><div class="chips" data-f="hab"></div></div>
+        <div class="step"><div class="step-q"><span class="step-n">4</span><span>Milyen a levél (levélke) alakja?</span></div><div class="chips" data-f="alak"></div></div>
+        <div class="step"><div class="step-q"><span class="step-n">5</span><span>Milyen a termés? <small>(a fán vagy alatta)</small></span></div><div class="chips" data-f="ter"></div></div>
+        <div class="step"><div class="step-q"><span class="step-n">6</span><span>Van feltűnő bélyege?</span></div><div class="chips" data-f="jel"></div></div>
+        <div class="step" id="habStep"><div class="step-q"><span class="step-n">7</span><span>Milyen az élőhely?</span></div><div class="chips" data-f="hab"></div></div>
         <div class="field"><label for="q">Keresés névre</label><input id="q" type="search" placeholder="pl. hárs, Acer, szil" autocomplete="off"></div>
         <div class="keyfoot"><div class="count" aria-live="polite"><b id="cnt">33</b> <span id="cntTxt">faj</span></div><button class="link" id="reset" type="button">Újrakezdés</button></div>
       </aside>
@@ -369,7 +382,7 @@ function midLeaf(sp){
   let u='';
   if(sp.under){const id='c'+(++UID);u=`<clipPath id="${id}"><rect x="-400" y="-500" width="400" height="1000"/></clipPath><path class="underside" d="${d}" clip-path="url(#${id})"/>`}
   const gl=sp.glands?`<circle class="gland" cx="-2.6" cy="3" r="2.1"/><circle class="gland" cx="2.6" cy="3" r="2.1"/>`:'';
-  const g=`<g transform="translate(0 ${-P})"><path class="blade" d="${d}"/>${u}<path class="vein" d="${v}"/><path class="rib" d="M0 ${P}L0 ${f1(-sp.L*.96)}"/>${gl}</g>`;
+  const g=`<g transform="translate(0 ${-P})"><path class="blade${sp.red?' red':''}" d="${d}"/>${u}<path class="vein" d="${v}"/><path class="rib" d="M0 ${P}L0 ${f1(-sp.L*.96)}"/>${gl}</g>`;
   return{g,h:sp.L+P};
 }
 function polarR(sp,phi,s){
@@ -389,7 +402,7 @@ function polarLeaf(sp){
   for(const a of(sp.va||[.6,1.15,1.75,2.35])){if(a===0)continue;for(const s of[1,-1]){const r=polarR(sp,a,s)*.82;const x=s*r*Math.sin(a),y=-r*Math.cos(a);v+=`M0 ${f1(rb*.85)}Q${f1(x*.4)} ${f1((rb*.85+y)/2)} ${f1(x)} ${f1(y)}`}}
   let u='';
   if(sp.under){const id='c'+(++UID);u=`<clipPath id="${id}"><rect x="-400" y="-500" width="400" height="1000"/></clipPath><path class="underside" d="${d}" clip-path="url(#${id})"/>`}
-  const g=`<g transform="translate(0 ${f1(-P-rb)})"><path class="blade" d="${d}"/>${u}<path class="vein" d="${v}"/><path class="rib" d="M0 ${f1(rb+P)}L0 ${f1(-rt*.94)}"/></g>`;
+  const g=`<g transform="translate(0 ${f1(-P-rb)})"><path class="blade${sp.red?' red':''}" d="${d}"/>${u}<path class="vein" d="${v}"/><path class="rib" d="M0 ${f1(rb+P)}L0 ${f1(-rt*.94)}"/></g>`;
   return{g,h:P+rb+rt};
 }
 function pinLeaf(sp){
@@ -399,16 +412,17 @@ function pinLeaf(sp){
   return{g:o,h:top+lf.L+(lf.P||0)};
 }
 function pineLeaf(sp){
-  const NL=(sp&&sp.L)||82;let o=`<path class="twig" d="M0 0Q5 -90 -2 -175"/>`;
+  const NL=(sp&&sp.L)||82,NN=(sp&&sp.n)||2;let o=`<path class="twig" d="M0 0Q5 -90 -2 -175"/>`;
   [-22,-55,-88,-121,-152].forEach((y,i)=>{const s=i%2?1:-1;
-    for(const[a,c]of[[s*14,s*10],[s*52,s*16]]){const L=NL,r=a*PI/180,ex=Math.sin(r)*L,ey=y-Math.cos(r)*L,cx=Math.sin(r)*L*.5+c,cy=y-Math.cos(r)*L*.5;o+=`<path class="needle" d="M0 ${y}Q${f1(cx)} ${f1(cy)} ${f1(ex)} ${f1(ey)}"/>`}
+    for(const[a,c]of(NN===5?[[4,6],[16,8],[28,10],[40,12],[52,14]]:[[14,10],[52,16]]).map(([a,c])=>[s*a,s*c])){const L=NL,r=a*PI/180,ex=Math.sin(r)*L,ey=y-Math.cos(r)*L,cx=Math.sin(r)*L*.5+c,cy=y-Math.cos(r)*L*.5;o+=`<path class="needle"${NN===5?' style="stroke-width:1.3"':''} d="M0 ${y}Q${f1(cx)} ${f1(cy)} ${f1(ex)} ${f1(ey)}"/>`}
     o+=`<path class="sheath" d="M0 ${y}l${s*2} -5"/>`});
   o+=`<path class="needle" d="M-2 -175Q-10 -205 -14 -232"/><path class="needle" d="M-2 -175Q6 -205 12 -230"/>`;
   return{g:o,h:154+NL};
 }
-function spruceLeaf(){
+function spruceLeaf(sp){
+  const blue=sp&&sp.blue;
   let o=`<path class="twig" style="stroke-width:4" d="M0 0Q-4 -100 2 -205"/>`;
-  for(let y=-8;y>-200;y-=4.5){for(const s of[1,-1]){const a=(s*(58+Math.random()*14))*PI/180,L=15+Math.random()*4;o+=`<path class="needle" style="stroke-width:1.6" d="M0 ${f1(y)}L${f1(Math.sin(a)*L)} ${f1(y-Math.cos(a)*L)}"/>`}}
+  for(let y=-8;y>-200;y-=4.5){for(const s of[1,-1]){const a=(s*(58+Math.random()*14))*PI/180,L=15+Math.random()*4;o+=`<path class="needle" style="stroke-width:1.6${blue?';stroke:var(--leaf-blue)':''}" d="M0 ${f1(y)}L${f1(Math.sin(a)*L)} ${f1(y-Math.cos(a)*L)}"/>`}}
   o+=`<path class="twig" style="stroke-width:2.5" d="M2 -150q14 4 20 14"/><ellipse cx="24" cy="-104" rx="10" ry="32" fill="var(--twig)"/>`;
   for(let k=0;k<7;k++)o+=`<path d="M16 ${-126+k*8}q8 5 16 0" fill="none" stroke="var(--sheet)" stroke-width="1" opacity=".6"/>`;
   return{g:o,h:210};
@@ -419,6 +433,45 @@ function palmLeaf(sp){
   for(let i=0;i<n;i++){const a=-span/2+span*i/(n-1);o+=`<g transform="translate(0 ${-P}) rotate(${f1(a)}) scale(${f1(lens[i]*100)/100})">${midLeaf(lf).g}</g>`}
   return{g:o,h:P+lf.L+(lf.P||0)};
 }
+function ginkgoLeaf(){
+  const P=70,R=110,N=120,pts=[[0,0]];
+  for(let i=0;i<=N;i++){const th=(-62+124*i/N)*PI/180;const r=R*(1-0.28*Math.exp(-Math.pow(th/0.07,2)))*(1+0.025*Math.sin(th*40));pts.push([Math.sin(th)*r,-Math.cos(th)*r])}
+  const d='M'+pts.map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'Z';
+  let v='';for(let k=0;k<22;k++){const th=(-58+116*k/21)*PI/180;v+=`M0 -4L${f1(Math.sin(th)*R*.93)} ${f1(-Math.cos(th)*R*.93)}`}
+  return{g:`<g transform="translate(0 ${-P})"><path class="blade" d="${d}"/><path class="vein" d="${v}"/><path class="rib" d="M0 ${P}L0 0"/></g>`,h:P+R};
+}
+function scaleLeaf(sp){
+  let o='';
+  const seg=(x0,y0,ang,len,w,depth)=>{
+    const a=ang*PI/180,x1=x0+Math.sin(a)*len,y1=y0-Math.cos(a)*len;
+    o+=`<path class="needle" style="stroke:var(--leaf);stroke-width:${f1(w)}" d="M${f1(x0)} ${f1(y0)}L${f1(x1)} ${f1(y1)}"/>`;
+    for(let t=0.08;t<0.98;t+=0.1){const px=x0+(x1-x0)*t,py=y0+(y1-y0)*t,nx=Math.cos(a)*w*.45,ny=Math.sin(a)*w*.45;o+=`<path class="vein" d="M${f1(px-nx)} ${f1(py-ny)}L${f1(px+Math.sin(a)*3)} ${f1(py-Math.cos(a)*3)}L${f1(px+nx)} ${f1(py+ny)}"/>`}
+    if(depth>0){const n=Math.max(2,Math.floor(len/24));for(let k=1;k<=n;k++){const t=k/(n+1),px=x0+(x1-x0)*t,py=y0+(y1-y0)*t,s=k%2?1:-1;seg(px,py,ang+s*46,len*.52*(1-t*.55),w*.72,depth-1)}}
+  };
+  seg(0,0,0,195,7,2);
+  o+=sp&&sp.v?`<circle cx="30" cy="-120" r="9" fill="var(--leaf-blue)"/><path d="M24 -126l-4 -4M36 -126l4 -4M30 -129l0 -5" stroke="var(--leaf-blue)" stroke-width="2"/>`:`<ellipse cx="-30" cy="-128" rx="5" ry="9" fill="var(--twig)"/><ellipse cx="30" cy="-96" rx="5" ry="9" fill="var(--twig)"/>`;
+  return{g:o,h:205};
+}
+function larchLeaf(sp){
+  const ev=sp&&sp.ever,L=ev?20:30,n=ev?18:22,col=ev?'var(--leaf-blue)':'var(--leaf-edge)';
+  let o=`<path class="twig" style="stroke-width:4" d="M0 0Q6 -100 -2 -200"/>`;
+  [-30,-70,-110,-150,-188].forEach((y,i)=>{const s=i%2?1:-1,bx=s*7,by=y-4;
+    o+=`<path class="twig" style="stroke-width:3.5" d="M0 ${y}L${bx} ${by}"/>`;
+    for(let k=0;k<n;k++){const a=(s*22+(-72+144*k/(n-1)))*PI/180,l=L*(.8+.2*Math.random());o+=`<path class="needle" style="stroke:${col};stroke-width:1.4" d="M${bx} ${by}L${f1(bx+Math.sin(a)*l)} ${f1(by-Math.cos(a)*l)}"/>`}});
+  o+=ev?`<rect x="16" y="-140" width="20" height="30" rx="9" fill="var(--twig)"/>`:`<ellipse cx="-20" cy="-92" rx="8" ry="12" fill="var(--twig)"/><path d="M-27 -95h14M-27 -88h14" stroke="var(--sheet)" opacity=".5"/>`;
+  return{g:o,h:225};
+}
+function firLeaf(sp){
+  const thin=sp&&sp.thin,dense=sp&&sp.dense,soft=sp&&sp.soft;
+  let o=`<path class="twig" style="stroke-width:${thin?2.5:4}" d="M0 0Q-5 -105 3 -205"/>`;
+  const step=thin?7:dense?6.5:9,L=thin?17:soft?25:28,W=thin?2:3,ang=dense?52:soft?66:80;
+  for(let y=-12;y>-200;y-=step){for(const s of[1,-1]){const a=s*ang+(Math.random()*10-5);
+    o+=`<g transform="translate(0 ${f1(y)}) rotate(${f1(a)})"><path class="blade${thin?' light':''}" d="M0 0C-${W} -5 -${W} -${L-5} 0 -${L}C${W} -${L-5} ${W} -5 0 0Z"/></g>`}}
+  if(thin)o+=`<circle cx="22" cy="-60" r="9" fill="var(--twig)"/>`;
+  else if(soft)o+=`<ellipse cx="-26" cy="-96" rx="10" ry="22" fill="var(--twig)"/><path d="M-34 -104l-6 -4M-18 -104l6 -4M-34 -88l-6 -4M-18 -88l6 -4" stroke="var(--twig)" stroke-width="2"/>`;
+  else o+=`<rect x="14" y="-170" width="17" height="44" rx="8" fill="var(--twig)"/>`;
+  return{g:o,h:210};
+}
 function yewLeaf(){
   let o=`<path class="twig" d="M0 0Q-5 -105 3 -205"/>`;
   for(let i=0;i<15;i++){const y=-16-i*12.6;for(const s of[1,-1]){const a=s*(72-i*1.5);o+=`<g transform="translate(0 ${f1(y)}) rotate(${f1(a)})"><path class="blade" d="M0 0C-3.2 -6 -3.2 -27 0 -33C3.2 -27 3.2 -6 0 0Z"/><path class="vein" d="M0 -3L0 -30"/></g>`}}
@@ -426,7 +479,7 @@ function yewLeaf(){
   return{g:o,h:226};
 }
 function leafSVG(g,label,vb=[220,250]){
-  const r=g.k==='mid'?midLeaf(g):g.k==='polar'?polarLeaf(g):g.k==='pin'?pinLeaf(g):g.k==='pine'?pineLeaf(g):g.k==='spruce'?spruceLeaf():g.k==='palm'?palmLeaf(g):yewLeaf();
+  const r=g.k==='mid'?midLeaf(g):g.k==='polar'?polarLeaf(g):g.k==='pin'?pinLeaf(g):g.k==='pine'?pineLeaf(g):g.k==='spruce'?spruceLeaf(g):g.k==='palm'?palmLeaf(g):g.k==='ginkgo'?ginkgoLeaf():g.k==='scale'?scaleLeaf(g):g.k==='larch'?larchLeaf(g):g.k==='fir'?firLeaf(g):yewLeaf();
   const sc=Math.min(1,(vb[1]-20)/r.h);
   return `<svg viewBox="0 0 ${vb[0]} ${vb[1]}" role="img" aria-label="${label}"><g transform="translate(${vb[0]/2} ${f1(vb[1]/2+r.h*sc/2)}) scale(${f1(sc*100)/100})">${r.g}</g></svg>`;
 }
@@ -444,7 +497,10 @@ const OPTS={
   type:[['egyszeru','Egyszerű, lapos'],['osszetett','Összetett, több levélke'],['tu','Tűlevél']],
   allas:[['szort','Szórt (váltakozó)'],['atellenes','Átellenes (párosával)']],
   szel:[['ep','Ép, sima'],['fogas','Fogas, fűrészes'],['karejos','Karéjos, szeldelt']],
-  hab:Object.entries(HAB)
+  hab:Object.entries(HAB),
+  alak:[['kerek','Kerekded vagy szíves'],['tojas','Tojásdad, elliptikus'],['keskeny','Keskeny, lándzsás'],['harom','Háromszögű, rombos'],['tenyeres','Tenyeresen karéjos'],['szarnyas-karejos','Tölgyszerűen karéjos'],['legyezo','Legyező alakú']],
+  ter:[['makk','Makk'],['toboz','Toboz vagy tobozka'],['dio','Dió, gesztenye, bükkmakk'],['bogyo','Húsos: bogyó, cseresznye, alma, eper'],['huvely','Hüvely vagy hosszú tok'],['szarnyas','Szárnyas (lependék, fellevél)'],['egyeb','Barka, gyapjas mag, gömb, tok']],
+  jel:[['tovis','Tövis vagy tüske'],['tejnedv','Tejnedv a letört nyélből'],['illat','Erős illat vagy szag dörzsölve'],['voros','Bordó vagy vöröses lomb'],['ezust','Ezüstös, fehéres fonák vagy tű'],['hamlo','Hámló, tarka kéreg'],['feher','Fehér kéreg']]
 };
 const ALLAS={szort:'szórt',atellenes:'átellenes',tu:'csavarvonalas'};
 const SZEL={ep:'ép szélű',fogas:'fogas',karejos:'karéjos'};
@@ -812,8 +868,329 @@ const T=[
  fruit:'Barkák tavasszal; az ültetett klónok többnyire porzósak, kevés „vattát” adnak.',
  habitat:'A fekete nyár és észak-amerikai nyárak hibridje; ártéri ültetvényekben és fasorokban.',
  tell:'Sorban ültetett, egyenes törzsű fák; a fekete nyár törzse dudoros, göcsörtös.',
- g:{k:'mid',prof:'delta',L:150,W:74,teeth:[{N:34,A:.03}],P:60,veins:6}}
+ g:{k:'mid',prof:'delta',L:150,W:74,teeth:[{N:34,A:.03}],P:60,veins:6}},
+{id:'szelidgesztenye',nat:false,hu:'Szelídgesztenye',la:'Castanea sativa',fam:'Bükkfélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:['domb'],alak:['keskeny'],ter:['dio'],jel:[],ctx:['erdo','varos'],mag:'20–30 m',lev:'12–22 cm',
+ short:'Hosszú, lándzsás levél szálkás fogakkal; tüskés burokban ehető gesztenye.',
+ leaf:'Hosszúkás-lándzsás, merev levél, a szélén szabályos, szálkában végződő fogakkal és sok párhuzamos oldalérrel.',
+ bark:'Idősen mélyen barázdált, a barázdák gyakran spirálisan csavarodnak a törzs körül.',
+ fruit:'Június–júliusban hosszú, sárgásfehér, erős illatú barkák; termése sűrűn tüskés burokban 1–3 ehető gesztenye.',
+ habitat:'A római kor óta termesztett, régóta honosodott faj. Savanyú talajon: Mecsek, Kőszegi-hegység, Nagymaros környéke, Zala.',
+ tell:'Szálkás fogú, hosszú levél. A vadgesztenyének tenyeresen összetett levele van, és a termése nem ehető.',
+ g:{k:'mid',L:190,W:40,a:1,b:1.1,teeth:[{N:18,A:.1}],P:15,veins:16}},
+{id:'hazi-berkenye',hu:'Házi berkenye',la:'Sorbus domestica',fam:'Rózsafélék',type:'osszetett',allas:'szort',szel:['fogas'],hab:['domb','szaraz'],alak:['keskeny'],ter:['bogyo'],jel:[],ctx:['erdo'],mag:'15–20 m',lev:'15–25 cm',
+ short:'Madárberkenyéhez hasonló levél, de kockás kéreg és körte alakú, sárgásbarna termés.',
+ leaf:'Páratlanul szárnyas, 11–21 hosszúkás, élesen fűrészes levélkével; a levélkék töve ép szélű.',
+ bark:'Szürkésbarna, idősen kockásan, cserepesen repedezett (a madárberkenyéé sima).',
+ bud:'Zöld, kopasz, ragadós rügyek (a madárberkenyéé lilás és szőrös).',
+ fruit:'2–3 cm-es, körte vagy alma alakú, sárgás-pirosas termés; utóérve, megpuhulva ehető.',
+ habitat:'Melegkedvelő tölgyesek, karsztbokorerdők, régi szőlőhegyek; ritka fa.',
+ tell:'Kockás kéreg, ragadós zöld rügy és nagyobb, körte alakú termés.',
+ g:{k:'pin',pairs:7,gap:22,base:22,ang:62,leaflet:{k:'mid',L:52,W:12,a:1,b:.8,teeth:[{N:14,A:.09,from:.25}],P:0,veins:5}}},
+{id:'vadalma',hu:'Vadalma',la:'Malus sylvestris',fam:'Rózsafélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:['domb','arter'],alak:['kerek','tojas'],ter:['bogyo'],jel:['tovis'],ctx:['erdo'],mag:'6–10 m',lev:'4–8 cm',
+ short:'Kerekded, fűrészes levél rövid nyéllel; kicsi, savanyú alma.',
+ leaf:'Kerekded-tojásdad, csipkésen fűrészes, felnőtten kopasz; a nyele rövidebb, mint a vadkörtéé.',
+ bark:'Szürkésbarna, vékony lemezekben, pikkelyesen hámlik.',
+ bud:'A rövid hajtások néha tövisszerűen végződnek.',
+ fruit:'Április–májusban rózsaszínes-fehér virágok; 2–3 cm-es, sárgászöld, nagyon savanyú alma.',
+ habitat:'Ligeterdők, tölgyesek szélei, erdőszélek; ritka, sok helyen keveredik a kivadult házi almával.',
+ tell:'Pikkelyesen hámló kéreg és rövid levélnyél. A vadkörte kérge kockás, a levélnyele hosszú.',
+ g:{k:'polar',R:66,base:.7,pk:[[0,.3,.35],[PI,-.1,.4]],teeth:{N:30,A:.03},P:22,va:[.6,1.2,1.8,2.4]}},
+{id:'galagonya',hu:'Egybibés galagonya',la:'Crataegus monogyna',fam:'Rózsafélék',type:'egyszeru',allas:'szort',szel:['karejos'],hab:['domb','szaraz','arter'],alak:['szarnyas-karejos'],ter:['bogyo'],jel:['tovis'],ctx:['erdo','varos'],mag:'4–10 m, gyakran cserje',lev:'2–5 cm',
+ short:'Kicsi, mélyen 3–7 karéjú levél, tövises ágak, piros termés.',
+ leaf:'Kicsi, ék alapú levél 3–7 mélyen bemetszett karéjjal; a karéjok csak a csúcsuk felé fogasak.',
+ bark:'Szürke, idősen apró lemezekben repedezett; a hajtásokon 1–2 cm-es tövisek.',
+ fruit:'Májusban fehér virágernyők; ősszel piros, egymagvú almácskák, sokáig a fán maradnak.',
+ habitat:'Erdőszélek, cserjések, legelők, sövények; az egyik leggyakoribb hazai cserje-fa.',
+ tell:'Tövis és apró, mélyen karéjos levél: hazai fáink közül csak ez ilyen.',
+ g:{k:'mid',L:110,W:52,a:1.5,b:.7,lob:{n:2.5,D:.7,q:1.3,ph:0},teeth:[{N:18,A:.05,from:.4}],P:22}},
+{id:'kecskefuz',hu:'Kecskefűz',la:'Salix caprea',fam:'Fűzfélék',type:'egyszeru',allas:'szort',szel:['fogas','ep'],hab:['hegy','domb'],alak:['tojas'],ter:['egyeb'],jel:['ezust'],ctx:['erdo'],mag:'5–12 m',lev:'5–12 cm',
+ short:'Széles, elliptikus, hullámos szélű fűzlevél, szürkén molyhos fonákkal.',
+ leaf:'Széles elliptikus, ráncos, hullámos vagy gyéren fogas szélű, fonáka szürkén molyhos. A fűzek közül a legszélesebb levelű.',
+ bark:'Fiatalon sima, szürkészöld, rombos paraszemölcsökkel; idősen repedezett.',
+ fruit:'Márciusban, lombfakadás előtt ezüstös, majd sárga „cicabarkák”: a legkorábbi méhlegelők egyike.',
+ habitat:'Erdővágások, erdőszélek, patakpartok, hegyvidéki erdők; pionír faj.',
+ tell:'Széles, nem lándzsás fűzlevél és kora tavaszi barka; a többi fűz levele keskeny.',
+ g:{k:'mid',L:120,W:46,a:.95,b:.9,teeth:[{N:10,A:.04,s:'wave'}],P:14,under:true,veins:9}},
+{id:'torekeny-fuz',hu:'Törékeny fűz',la:'Salix × fragilis',fam:'Fűzfélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:['arter'],alak:['keskeny'],ter:['egyeb'],jel:[],ctx:['erdo'],mag:'10–20 m',lev:'8–15 cm',
+ short:'Hosszú, fényes, kopasz lándzsás levél; a vesszők tövüknél könnyen letörnek.',
+ leaf:'Lándzsás, hosszan kihegyezett, durván fűrészes, mindkét oldalán kopasz, felül fényes zöld.',
+ bark:'Szürkésbarna, mélyen, hálózatosan barázdált.',
+ bud:'A vesszők az elágazásnál pattanva letörnek, innen a neve.',
+ fruit:'Barkák lombfakadással egy időben.',
+ habitat:'Patakok és folyók partja, nedves rétek, árkok.',
+ tell:'Kopasz, fényes levél; a fehér fűzé ezüstösen selymes.',
+ g:{k:'mid',L:180,W:24,a:1,b:1.2,teeth:[{N:34,A:.07}],P:10,veins:13}},
+{id:'ezustjuhar',nat:false,hu:'Ezüstjuhar',la:'Acer saccharinum',fam:'Juharfélék',type:'egyszeru',allas:'atellenes',szel:['karejos'],hab:['arter'],alak:['tenyeres'],ter:['szarnyas'],jel:['ezust'],ctx:['varos'],mag:'20–30 m',lev:'10–15 cm',
+ short:'Mélyen bemetszett, 5 karéjú levél ezüstfehér fonákkal; törékeny ágak.',
+ leaf:'5 karéjú levél mély öblökkel, a karéjok maguk is szabálytalanul fogasak; fonáka ezüstfehér.',
+ bark:'Fiatalon sima, ezüstszürke; idősen hosszú, lazán elálló lemezekben hámlik.',
+ fruit:'Nagy ikerlependék, már május–júniusban érik és hullik.',
+ habitat:'Észak-Amerikából; parkokban, lakótelepeken, utcákon nagyon gyakori. Az ágai viharban könnyen törnek.',
+ tell:'A legmélyebben bemetszett juharlevél, ezüstös fonákkal.',
+ g:{k:'polar',R:95,base:.18,pk:[[0,.75,.16],[1.1,.7,.16],[2.15,.42,.18],[.5,.22,.06],[1.55,.2,.06],[.8,.15,.05]],teeth:{N:26,A:.04},under:true,P:50,va:[1.1,2.15]}},
+{id:'japanakac',nat:false,hu:'Japánakác',la:'Styphnolobium japonicum',fam:'Pillangósvirágúak',type:'osszetett',allas:'szort',szel:['ep'],hab:[],alak:['tojas'],ter:['huvely'],jel:[],ctx:['varos'],mag:'15–25 m',lev:'15–25 cm',
+ short:'Akácszerű levél, de hegyes levélkékkel és tövisek nélkül; nyár végi virágzás.',
+ leaf:'Páratlanul szárnyas, 7–17 tojásdad, hegyes csúcsú, ép szélű levélkével; fonáka kékeszöld.',
+ bark:'Szürke, hosszanti, hálózatos barázdákkal; a fiatal vesszők zöldek.',
+ fruit:'Július–augusztusban sárgásfehér virágbugák; termése gyöngysorszerűen befűzött, húsos hüvely.',
+ habitat:'Kelet-Ázsiából; utcafának, parkokba ültetik, jól bírja a városi hőséget.',
+ tell:'Nincsenek tövisek, a levélkék hegyesek, a vesszők zöldek. Az akác levélkéi kerekek, a hajtásán tövispár ül.',
+ g:{k:'pin',pairs:5,gap:30,base:22,ang:60,leaflet:{k:'mid',L:44,W:15,a:.8,b:1.1,P:3,veins:4}}},
+{id:'gledicsia',nat:false,hu:'Tövises lepényfa (gledícsia)',la:'Gleditsia triacanthos',fam:'Pillangósvirágúak',type:'osszetett',allas:'szort',szel:['ep','fogas'],hab:['arter'],alak:['tojas'],ter:['huvely'],jel:['tovis'],ctx:['varos'],mag:'15–25 m',lev:'15–25 cm',
+ short:'Finom, páros szárnyas levél apró levélkékkel; elágazó tövisek; hosszú, csavarodó hüvely.',
+ leaf:'Párosan, gyakran kétszeresen szárnyas, 20–30 apró, 2–3 cm-es, finoman csipkés levélkével; laza, áttört lomb.',
+ bark:'Sötét; a törzsön és az ágakon gyakran hosszú, elágazó tövisek.',
+ fruit:'20–40 cm-es, lapos, csavarodó, sötétbarna hüvely, télen is a fán.',
+ habitat:'Észak-Amerikából; parkokba, utcákra, régebben sövénynek ültették; ártereken kivadul.',
+ tell:'Elágazó törzstövisek és óriási, csavart hüvelyek.',
+ fajtak:'„Inermis”: tövis nélküli; „Sunburst”: aranysárga lombú. Utcafásításban ezek gyakoribbak, mint az alapfaj.',
+ g:{k:'pin',pairs:9,gap:19,base:16,ang:64,leaflet:{k:'mid',L:26,W:8,a:1,b:.7,P:1,veins:3}}},
+{id:'csorgofa',nat:false,hu:'Bugás csörgőfa',la:'Koelreuteria paniculata',fam:'Szappanfafélék',type:'osszetett',allas:'szort',szel:['fogas','karejos'],hab:[],alak:['tojas'],ter:['egyeb'],jel:[],ctx:['varos'],mag:'8–12 m',lev:'20–35 cm',
+ short:'Szárnyas levél durván, karéjosan fogas levélkékkel; sárga virág, lampion termés.',
+ leaf:'Páratlanul szárnyas, 7–15 tojásdad levélkével, amelyek széle durván, karéjosan fogas.',
+ bark:'Szürkésbarna, sekélyen barázdált.',
+ fruit:'Június–júliusban nagy, sárga virágbugák; termése hólyagos, lampion alakú, papírszerű tok.',
+ habitat:'Kelet-Ázsiából; kis kertekbe, utcákra ültetik, bírja a szárazságot.',
+ tell:'Lampionszerű termés és karéjosan fogas levélkék.',
+ g:{k:'pin',pairs:4,gap:32,base:22,ang:58,leaflet:{k:'mid',L:58,W:22,a:.85,b:.9,teeth:[{N:6,A:.18}],P:2,veins:5}}},
+{id:'szivarfa',nat:false,hu:'Szivarfa',la:'Catalpa bignonioides',fam:'Szivarfafélék',type:'egyszeru',allas:'atellenes',szel:['ep'],hab:[],alak:['kerek'],ter:['huvely'],jel:['illat'],ctx:['varos'],mag:'10–15 m',lev:'15–30 cm',
+ short:'Óriási, szív alakú, ép szélű levél; hosszú, szivarszerű termés.',
+ leaf:'Nagy, szív alakú, ép szélű, puha levél, átellenesen vagy hármasával örvösen áll; dörzsölve kellemetlen szagú.',
+ bark:'Szürkésbarna, vékony pikkelyekben hámló.',
+ fruit:'Június–júliusban fehér, belül sárga-lila pettyes virágbugák; termése 20–40 cm-es, vékony, lecsüngő tok, télen is a fán lóg.',
+ habitat:'Észak-Amerikából; parkokban, tereken, kertekben gyakori.',
+ tell:'Hosszú „szivarok” a fán és nagy szíves levél. A császárfa levele szőrös, a termése tojásdad tok.',
+ g:{k:'polar',R:96,base:.62,pk:[[0,.38,.22],[1.9,.4,.9],[PI,-.32,.25]],P:40,va:[.6,1.1,1.7,2.3]}},
+{id:'csaszarfa',nat:false,hu:'Császárfa',la:'Paulownia tomentosa',fam:'Császárfafélék',type:'egyszeru',allas:'atellenes',szel:['ep'],hab:[],alak:['kerek'],ter:['egyeb'],jel:[],ctx:['varos'],mag:'10–20 m',lev:'15–40 cm',
+ short:'Hatalmas, szőrös, szív alakú levél; lila virágok lombfakadás előtt.',
+ leaf:'Nagyon nagy, szív alakú, ép vagy enyhén 3 karéjú levél, mindkét oldalán bársonyosan szőrös; a sarjakon 60 cm-es is lehet.',
+ bark:'Szürkésbarna, sokáig sima, világos paraszemölcsökkel.',
+ fruit:'Áprilisban, lombfakadás előtt illatos, lila, harang alakú virágbugák; termése 3–4 cm-es, tojásdad, fás tok.',
+ habitat:'Kínából; díszfaként és energiaültetvényekben, helyenként kivadul.',
+ tell:'Szőrös óriáslevél és tavaszi lila virágzás. A szivarfa levele kopaszabb, a virága fehér.',
+ g:{k:'polar',R:100,base:.62,pk:[[0,.3,.3],[1.3,.12,.25],[1.9,.38,.9],[PI,-.3,.25]],P:45,va:[.6,1.1,1.7,2.3]}},
+{id:'tulipanfa',nat:false,hu:'Tulipánfa',la:'Liriodendron tulipifera',fam:'Liliomfafélék',type:'egyszeru',allas:'szort',szel:['karejos','ep'],hab:[],alak:['tenyeres'],ter:['szarnyas'],jel:[],ctx:['varos'],mag:'25–35 m',lev:'10–20 cm',
+ short:'Négy karéjú, a csúcsán egyenesen csonka, „levágott” levél; tulipánszerű virág.',
+ leaf:'Négy karéjú, ép szélű, hosszú nyelű levél; a csúcsa szélesen csonka vagy bemetszett, mintha levágták volna.',
+ bark:'Szürke, idősen hálózatosan barázdált.',
+ fruit:'Május–júniusban sárgászöld-narancs, tulipán alakú virágok; termése felálló, tobozszerű lependékcsomó.',
+ habitat:'Észak-Amerikából; parkokban, arborétumokban, nagyobb kertekben.',
+ tell:'A „levágott” csúcsú levél semmi mással nem téveszthető össze.',
+ g:{k:'polar',R:80,base:.55,pk:[[0,-.32,.22],[.75,.42,.22],[1.85,.35,.3],[PI,-.25,.3]],P:50,va:[.75,1.85]}},
+{id:'ginkgo',nat:false,hu:'Páfrányfenyő (ginkgo)',la:'Ginkgo biloba',fam:'Páfrányfenyőfélék',type:'egyszeru',allas:'szort',szel:['ep','karejos'],hab:[],alak:['legyezo'],ter:['bogyo'],jel:[],ctx:['varos'],mag:'20–30 m',lev:'5–8 cm',
+ short:'Legyező alakú levél, villásan elágazó erekkel; ősszel aranysárga.',
+ leaf:'Legyező alakú, gyakran középen bemetszett levél villásan elágazó, párhuzamos erekkel; a rövidhajtásokon csomóban ül.',
+ bark:'Szürkésbarna, idősen barázdált.',
+ fruit:'Kétlaki. A női fák húsos, sárga, avas vaj szagú magot hoznak, ezért utcára főleg porzós fákat ültetnek.',
+ habitat:'Kínából; a földtörténet „élő kövülete”. Parkokban és utcákon ültetik, nagyon szívós.',
+ tell:'A legyező alakú levél semmivel sem téveszthető össze.',
+ g:{k:'ginkgo'}},
+{id:'diszkorte',nat:false,hu:'Kínai díszkörte',la:'Pyrus calleryana',fam:'Rózsafélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:[],alak:['tojas','kerek'],ter:['bogyo'],jel:[],ctx:['varos'],mag:'8–15 m',lev:'4–8 cm',
+ short:'Fényes, csipkés szélű levél, keskeny, szabályos korona, tavaszi fehér virágtömeg.',
+ leaf:'Tojásdad-kerekded, finoman csipkés szélű, bőrnemű, nagyon fényes levél; ősszel bíborvörös.',
+ bark:'Szürkésbarna, kockásan repedezett.',
+ fruit:'Március–áprilisban fehér, kellemetlen szagú virágtömeg; termése apró, kb. 1 cm-es, barna körte.',
+ habitat:'Kínából; az utóbbi évtizedek egyik leggyakoribb utcafája, főleg a „Chanticleer” fajta.',
+ tell:'Szabályos, keskeny korona és nagyon fényes levél. A vadkörte koronája szabálytalan, az ágai tövisesek.',
+ g:{k:'polar',R:62,base:.72,pk:[[0,.32,.3],[PI,-.12,.4]],teeth:{N:24,A:.03,s:'wave'},P:34,va:[.6,1.2,1.8,2.4]}},
+{id:'diszcseresznye',nat:false,hu:'Japán díszcseresznye',la:'Prunus serrulata',fam:'Rózsafélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:[],alak:['tojas'],ter:['bogyo'],jel:[],ctx:['varos'],mag:'5–10 m',lev:'6–12 cm',
+ short:'Szálkásan fűrészes, hosszan kihegyezett levél; tavasszal rózsaszín virágözön.',
+ leaf:'Elliptikus, hosszan kihegyezett levél, a szélén szálkában végződő fűrészfogakkal; kihajtáskor gyakran bronzos.',
+ bark:'Fényes, vörösbarna, vízszintes paraszemölcs-sávokkal.',
+ fruit:'Áprilisban rózsaszín vagy fehér, gyakran telt virágok; termést alig vagy egyáltalán nem hoz.',
+ habitat:'Japánból származó fajták; kertekben, parkokban, utcákon.',
+ tell:'Szálkás fogak és sávos, fényes kéreg. A madárcseresznye kérge gyűrűsen hámlik, a virágai szimplák, fehérek.',
+ g:{k:'mid',L:160,W:50,a:1.15,b:1.25,teeth:[{N:30,A:.07}],P:26,veins:10}},
+{id:'verszilva',nat:false,hu:'Vérszilva',la:'Prunus cerasifera ‘Nigra’',fam:'Rózsafélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:[],alak:['tojas'],ter:['bogyo'],jel:['voros'],ctx:['varos'],mag:'5–8 m',lev:'4–6 cm',
+ short:'Kicsi, egész nyáron bordó levél; halvány rózsaszín virág kora tavasszal.',
+ leaf:'Kicsi, elliptikus-tojásdad, csipkésen fűrészes levél, egész nyáron bordó vagy sötétlila.',
+ bark:'Sötét, lilásbarna, sima, idősen repedezett.',
+ fruit:'Márciusban, lombfakadáskor halvány rózsaszín virágok; termése kis, sötétvörös szilva.',
+ habitat:'A cseresznyeszilva vörös lombú fajtája; kertekben, utcákon nagyon gyakori.',
+ tell:'A kicsi, bordó, fogas levél. A vérbükk levele nagyobb és ép szélű.',
+ fajtak:'Az alapfaj, a zöld levelű cseresznyeszilva (mirabolán) erdőszéleken, utak mentén kivadul.',
+ g:{k:'mid',L:120,W:42,a:.95,b:.9,teeth:[{N:22,A:.05,s:'wave'}],P:16,veins:7,red:true}},
+{id:'feher-eper',nat:false,hu:'Fehér eperfa',la:'Morus alba',fam:'Eperfafélék',type:'egyszeru',allas:'szort',szel:['fogas','karejos'],hab:['arter'],alak:['kerek','tojas'],ter:['bogyo'],jel:['tejnedv'],ctx:['varos','erdo'],mag:'10–15 m',lev:'6–15 cm',
+ short:'Fényes, változatos (osztatlan vagy karéjos) levél egy fán; fehér vagy rózsaszínes eper.',
+ leaf:'Tojásdad, fogas, felül fényes, kopasz levél; ugyanazon a fán osztatlan és szabálytalanul karéjos levelek is vannak. Tejnedves.',
+ bark:'Sárgásbarna-szürke, hosszanti, hálózatos barázdákkal.',
+ fruit:'Június–júliusban fehér, rózsaszín vagy lilás, édes, szederszerű „eper”.',
+ habitat:'Kelet-Ázsiából; a selyemhernyó-tenyésztéshez ültették falvakba, utak mentén, sok helyen kivadult.',
+ tell:'Változatos alakú levelek egy fán és a tejnedv. A fekete eperfa levele érdes és szőrös.',
+ g:{k:'polar',R:72,base:.62,pk:[[0,.3,.28],[1,.12,.15],[1.9,.3,.6],[PI,-.25,.3]],teeth:{N:22,A:.05},P:30,va:[.6,1.1,1.7,2.3]}},
+{id:'fekete-eper',nat:false,hu:'Fekete eperfa',la:'Morus nigra',fam:'Eperfafélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:[],alak:['kerek'],ter:['bogyo'],jel:['tejnedv'],ctx:['varos'],mag:'6–10 m',lev:'8–15 cm',
+ short:'Érdes, szőrös, szíves alapú levél; fekete, savanykás-édes eper.',
+ leaf:'Széles tojásdad, szíves alapú, durván fogas levél; felül érdes, a fonákán szőrös. Tejnedves.',
+ bark:'Narancsbarnás, repedezett; a törzs gyakran göcsörtös, zömök.',
+ fruit:'Július–augusztusban sötét, majdnem fekete, lédús eper, erősen fog.',
+ habitat:'Nyugat-Ázsiából; régi kertekben, udvarokon, falvakban ültetik.',
+ tell:'Érdes, szőrös levél és nagy, sötét eper. A fehér eperfa levele sima és fényes.',
+ g:{k:'polar',R:78,base:.6,pk:[[0,.38,.25],[1.9,.36,.85],[PI,-.32,.25]],teeth:{N:24,A:.05},P:22,va:[.6,1.1,1.7,2.3]}},
+{id:'turkesztani-szil',nat:false,inv:true,hu:'Turkesztáni szil',la:'Ulmus pumila',fam:'Szilfélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:['szaraz','homok'],alak:['tojas'],ter:['szarnyas'],jel:[],ctx:['varos','erdo'],mag:'10–20 m',lev:'2–7 cm',
+ short:'Kicsi, egyszerűen fűrészes, alig aszimmetrikus szillevél.',
+ leaf:'Kicsi, elliptikus, egyszeresen (ritkán kétszeresen) fűrészes levél; az alapja csak kissé aszimmetrikus.',
+ bark:'Szürke, idősen durván barázdált.',
+ fruit:'Március–áprilisban tömegesen hulló, kerek, szárnyas termések.',
+ habitat:'Közép-Ázsiából; szárazságtűrése miatt utak mellé, erdősávokba ültették. Terjed, és a mezei szillel is kereszteződik.',
+ tell:'A hazai szileknél kisebb, egyszerűbben fogazott levél, alig ferde alappal.',
+ g:{k:'mid',L:100,W:34,a:.95,b:1,asym:.04,teeth:[{N:14,A:.07}],P:6,veins:9}},
+{id:'szomorufuz',nat:false,hu:'Szomorúfűz',la:'Salix × sepulcralis ‘Chrysocoma’',fam:'Fűzfélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:[],alak:['keskeny'],ter:['egyeb'],jel:[],ctx:['varos'],mag:'10–20 m',lev:'8–12 cm',
+ short:'Földig lecsüngő, aranysárga vesszők; keskeny fűzlevél.',
+ leaf:'Keskeny lándzsás, finoman fűrészes levél, a fonáka kékes-szürkés.',
+ bark:'Szürkésbarna, mélyen barázdált; a fiatal vesszők aranysárgák, hosszan lecsüngők.',
+ fruit:'Barkák lombfakadással egy időben.',
+ habitat:'Kerti hibrid (fehér fűz × babiloni fűz); tavak, patakok partján, parkokban.',
+ tell:'A földig csüngő, sárga vesszőkről messziről felismerhető.',
+ g:{k:'mid',L:170,W:18,a:1,b:1.3,teeth:[{N:40,A:.05}],P:6,under:true,veins:12}},
+{id:'keleti-platan',nat:false,hu:'Keleti platán',la:'Platanus orientalis',fam:'Platánfélék',type:'egyszeru',allas:'szort',szel:['karejos'],hab:[],alak:['tenyeres'],ter:['egyeb'],jel:['hamlo'],ctx:['varos'],mag:'25–30 m',lev:'10–20 cm',
+ short:'Mélyen, 5–7 karéjra szeldelt levél; egy száron 3–6 termésgömb.',
+ leaf:'Mélyen, 5–7 keskeny, hegyes karéjra szeldelt, fogas levél; mélyebben bemetszett, mint a juharlevelű platáné.',
+ bark:'Nagy lemezekben hámló, tarka.',
+ fruit:'3–6 gömb alakú termésfüzér egy kocsányon (a juharlevelű platánon 1–2).',
+ habitat:'Délkelet-Európából és Kis-Ázsiából; parkokban, régi kastélykertekben.',
+ tell:'Mélyebb bemetszésű levél és több termésgömb egy száron.',
+ g:{k:'polar',R:95,base:.2,pk:[[0,.7,.18],[.85,.62,.16],[1.6,.55,.16],[2.35,.3,.18]],teeth:{N:14,A:.06},P:45,va:[.85,1.6,2.35]}},
+{id:'amerikai-koris',nat:false,inv:true,hu:'Amerikai kőris',la:'Fraxinus pennsylvanica',fam:'Olajfafélék',type:'osszetett',allas:'atellenes',szel:['fogas','ep'],hab:['arter'],alak:['keskeny','tojas'],ter:['szarnyas'],jel:[],ctx:['erdo'],mag:'15–25 m',lev:'20–30 cm',
+ short:'5–9 nyeles, gyéren fogas levélke, barna rügy; ártereken invazív.',
+ leaf:'Páratlanul szárnyas, 5–9 rövid nyelű, elliptikus-lándzsás, gyéren fogas vagy ép levélkével.',
+ bark:'Szürkésbarna, rombos mintázatban, sűrűn barázdált.',
+ bud:'Barna, szőrös rügyek.',
+ fruit:'Keskeny, egyszárnyú lependékek csomókban.',
+ habitat:'Észak-Amerikából; ártéri erdősítésekben ültették, a nagy folyók mentén tömegesen terjed.',
+ tell:'Kevesebb, nyeles levélke és barna rügy. A magas kőris rügye fekete, levélkéi ülők; a magyar kőris levélkéi keskenyebbek.',
+ g:{k:'pin',pairs:3,gap:38,base:26,ang:56,leaflet:{k:'mid',L:70,W:20,a:.95,b:1.1,teeth:[{N:10,A:.05,from:.35}],P:6,veins:6}}},
+{id:'kesei-meggy',nat:false,inv:true,hu:'Kései meggy',la:'Prunus serotina',fam:'Rózsafélék',type:'egyszeru',allas:'szort',szel:['fogas'],hab:['homok'],alak:['tojas','keskeny'],ter:['bogyo'],jel:['illat'],ctx:['erdo'],mag:'10–20 m',lev:'5–12 cm',
+ short:'Fényes, bőrnemű, finoman csipkés levél; fürtös fekete termés.',
+ leaf:'Keskeny elliptikus, bőrnemű, felül erősen fényes, finoman csipkés levél; a főér fonáki oldalán gyakran barnás szőrsáv.',
+ bark:'Sötét, sima, vízszintes paraszemölcsökkel; megkarcolva keserűmandula-szagú.',
+ fruit:'Május–júniusban fehér, fürtös virágzat; ősszel fekete, kesernyés-édes csonthéjasok fürtökben.',
+ habitat:'Észak-Amerikából; homokon (Nyírség, Duna–Tisza köze) az erdők cserjeszintjében invazív.',
+ tell:'Fürtös virág- és terméságazat, fényes levél. A madárcseresznye termései nem fürtben, hanem csomókban ülnek.',
+ g:{k:'mid',L:130,W:36,a:1,b:1.1,teeth:[{N:34,A:.03,s:'wave'}],P:14,veins:10}},
+{id:'nyugati-tuja',nat:false,hu:'Nyugati tuja',la:'Thuja occidentalis',fam:'Ciprusfélék',type:'tu',allas:'tu',szel:[],hab:[],alak:[],ter:['toboz'],jel:['illat'],ctx:['varos'],mag:'5–15 m',lev:'2–4 mm (pikkely)',
+ short:'Lapos, vízszintes, pikkelyleveles ágrendszerek; dörzsölve gyantás illat.',
+ leaf:'Apró, egymásra simuló pikkelylevelek lapos, vízszintes ágrendszereken; a fonákjuk sárgászöld, fehér rajzolat nélkül.',
+ bark:'Vörösbarna, hosszú, keskeny szálakban hámlik.',
+ fruit:'Kb. 1 cm-es, tojásdad, felálló, bőrnemű tobozok.',
+ habitat:'Észak-Amerikából; a leggyakoribb sövényfa, temetőkben, kertekben. Az aszályt egyre rosszabbul bírja.',
+ tell:'Vízszintes, lapos ágrendszer. A keleti tujáé függőlegesen áll, a tobozai kampósak.',
+ g:{k:'scale'}},
+{id:'keleti-tuja',nat:false,hu:'Keleti tuja',la:'Platycladus orientalis',fam:'Ciprusfélék',type:'tu',allas:'tu',szel:[],hab:[],alak:[],ter:['toboz'],jel:[],ctx:['varos'],mag:'5–12 m',lev:'2–3 mm (pikkely)',
+ short:'Függőlegesen, könyvlapszerűen álló pikkelyleveles ágak; kampós pikkelyű tobozok.',
+ leaf:'Apró pikkelylevelek függőleges síkban álló, lapos ágrendszereken; mindkét oldaluk egyformán zöld.',
+ bark:'Vörösbarna, vékony szálakban hámlik.',
+ fruit:'Kékesen hamvas, előbb húsos, majd fásodó toboz, a pikkelyein kampós nyúlvánnyal.',
+ habitat:'Kelet-Ázsiából; temetőkben, kertekben, sövénynek. Szárazságtűrőbb, mint a nyugati tuja.',
+ tell:'A függőlegesen álló ágrendszerek; a nyugati tujáé vízszintes.',
+ g:{k:'scale',v:true}},
+{id:'szuros-luc',nat:false,hu:'Szúrós luc (ezüstfenyő)',la:'Picea pungens',fam:'Fenyőfélék',type:'tu',allas:'tu',szel:[],hab:[],alak:[],ter:['toboz'],jel:['ezust'],ctx:['varos'],mag:'15–25 m',lev:'2–3 cm (tű)',
+ short:'Kékes-ezüstös, nagyon szúrós, merev tűk; a kertek „karácsonyfája”.',
+ leaf:'Merev, nagyon szúrós, négyélű tűk minden irányban, sok fajtán kékes-ezüstös hamvassággal.',
+ bark:'Szürkésbarna, pikkelyesen repedezett.',
+ fruit:'6–10 cm-es, lecsüngő, világosbarna toboz papírszerű pikkelyekkel.',
+ habitat:'Észak-Amerika hegyvidékeiről; kertekben, köztereken nagyon gyakori.',
+ tell:'Kékes, erősen szúrós tűk; a lucfenyőé zöld és kevésbé szúrós.',
+ g:{k:'spruce',blue:true}},
+{id:'simafenyo',nat:false,hu:'Simafenyő',la:'Pinus strobus',fam:'Fenyőfélék',type:'tu',allas:'tu',szel:[],hab:['domb'],alak:[],ter:['toboz'],jel:[],ctx:['varos','erdo'],mag:'25–35 m',lev:'8–12 cm (tű)',
+ short:'Ötösével álló, puha, vékony, kékeszöld tűk; hosszú, ívelt toboz.',
+ leaf:'Öt tű egy kötegben; 8–12 cm-esek, vékonyak, puhák, hajlékonyak, kékeszöldek.',
+ bark:'Fiatalon sima, szürkészöld; idősen sötét, mélyen barázdált.',
+ fruit:'10–20 cm-es, keskeny, enyhén ívelt, lecsüngő, gyantás toboz.',
+ habitat:'Észak-Amerikából; parkokban és erdészeti ültetvényekben (pl. Őrség, Zala).',
+ tell:'Öt puha tű egy kötegben; a hazai fenyőknél kettő van.',
+ g:{k:'pine',L:100,n:5}},
+{id:'duglaszfenyo',nat:false,hu:'Duglászfenyő',la:'Pseudotsuga menziesii',fam:'Fenyőfélék',type:'tu',allas:'tu',szel:[],hab:['domb','hegy'],alak:[],ter:['toboz'],jel:['illat'],ctx:['erdo','varos'],mag:'30–50 m',lev:'2–3,5 cm (tű)',
+ short:'Puha, lapos tűk, dörzsölve citrusos illat; a tobozpikkelyek közül háromágú fellevelek lógnak ki.',
+ leaf:'Puha, lapos, tompa csúcsú tűk, körben vagy kissé fésűsen állnak; a fonákjukon két halvány sáv. Dörzsölve citrusos illatúak.',
+ bark:'Fiatalon sima, gyantahólyagos; idősen vastag, parás, mélyen barázdált.',
+ bud:'Hegyes, barna, orsó alakú rügyek (a bükkrügyre emlékeztetnek).',
+ fruit:'5–10 cm-es, lecsüngő toboz; a pikkelyek közül háromágú, „egérlábszerű” fellevelek nyúlnak ki.',
+ habitat:'Észak-Amerikából; erdészeti telepítésekben (Nyugat-Dunántúl, Északi-középhegység) és parkokban.',
+ tell:'A háromágú fellevelek a tobozon: ilyen semmilyen más fenyőnek nincs.',
+ g:{k:'fir',soft:true}},
+{id:'vorosfenyo',nat:false,hu:'Európai vörösfenyő',la:'Larix decidua',fam:'Fenyőfélék',type:'tu',allas:'tu',szel:[],hab:['hegy','domb'],alak:[],ter:['toboz'],jel:[],ctx:['erdo','varos'],mag:'25–35 m',lev:'2–3,5 cm (tű)',
+ short:'Lombhullató fenyő: puha tűk csomókban a rövidhajtásokon; ősszel aranysárga.',
+ leaf:'Puha, világoszöld tűk 20–40-es csomókban a rövidhajtásokon, a hosszúhajtásokon egyesével; ősszel megsárgulnak és lehullanak.',
+ bark:'Vörösbarna, vastag, pikkelyesen repedezett.',
+ fruit:'2–4 cm-es, tojásdad, felálló tobozok, évekig az ágon maradnak.',
+ habitat:'Az Alpokból és a Kárpátokból; erdészeti telepítésekben (Nyugat-Dunántúl, Északi-középhegység) és parkokban.',
+ tell:'Csomós tűk és télen kopasz ágak. Az atlasz cédrus tűi is csomósak, de örökzöldek és merevebbek.',
+ g:{k:'larch'}},
+{id:'atlasz-cedrus',nat:false,hu:'Atlasz cédrus',la:'Cedrus atlantica',fam:'Fenyőfélék',type:'tu',allas:'tu',szel:[],hab:[],alak:[],ter:['toboz'],jel:['ezust'],ctx:['varos'],mag:'20–35 m',lev:'1,5–2,5 cm (tű)',
+ short:'Örökzöld, merev tűk csomókban; hordó alakú, felálló tobozok.',
+ leaf:'Merev, rövid, kékeszöld vagy ezüstös tűk 20–40-es csomókban a rövidhajtásokon; örökzöld.',
+ bark:'Szürke, sokáig sima, idősen kis, lapos pikkelyekre repedezett.',
+ fruit:'5–8 cm-es, hordó alakú, felálló toboz, az ágon esik szét.',
+ habitat:'Észak-Afrika hegyeiből; parkokban, nagyobb kertekben, főleg a kékes „Glauca” fajta.',
+ tell:'Csomós tűk, de télen is zöldek; a vörösfenyő lombhullató.',
+ g:{k:'larch',ever:true}},
+{id:'mocsarciprus',nat:false,hu:'Mocsárciprus',la:'Taxodium distichum',fam:'Ciprusfélék',type:'tu',allas:'tu',szel:[],hab:[],alak:[],ter:['toboz'],jel:[],ctx:['varos'],mag:'20–35 m',lev:'1–2 cm (tű)',
+ short:'Lombhullató, puha, fésűs tűk; vízparton „térdgyökerek”.',
+ leaf:'Puha, lapos, világoszöld tűk a vékony hajtásokon kétsorosan, fésűsen; ősszel rozsdavörösen, a hajtással együtt hullanak le.',
+ bark:'Vörösbarna, hosszú szálakban hámló; a törzs töve kiszélesedik.',
+ fruit:'2–3 cm-es, gömbölyű tobozok.',
+ habitat:'Észak-Amerika mocsaraiból; parkok tavai mellett, arborétumokban. Vízparton a gyökeréből felálló „térdek” nőnek.',
+ tell:'Lombhullató, fésűs, puha tű. A tiszafa örökzöld, sötétebb, a magja piros magköpenyben ül.',
+ g:{k:'fir',thin:true}},
+{id:'jegenyefenyo',nat:false,hu:'Közönséges jegenyefenyő',la:'Abies alba',fam:'Fenyőfélék',type:'tu',allas:'tu',szel:[],hab:['hegy','domb'],alak:[],ter:['toboz'],jel:[],ctx:['erdo','varos'],mag:'30–50 m',lev:'2–3 cm (tű)',
+ short:'Lapos, tompa, csúcsán bemetszett tűk két fehér sávval; felálló tobozok.',
+ leaf:'Lapos, nem szúrós tűk, a csúcsukon kis bemetszéssel; fésűsen kétfelé állnak, a fonákjukon két fehér viaszcsík.',
+ bark:'Világos ezüstszürke, sokáig sima.',
+ fruit:'10–15 cm-es, felálló toboz, az ágon pikkelyenként esik szét, egészben nem találod a földön.',
+ habitat:'Hazánkban legfeljebb néhány nyugat-dunántúli állomány őshonos; máshol ültetett, parkokban és erdészeti telepítésekben.',
+ tell:'Felálló tobozok és lapos, bemetszett csúcsú tűk. A lucfenyő tűi szúrósak, négyélűek, a tobozai lecsüngők.',
+ g:{k:'fir'}},
+{id:'nordmann',nat:false,hu:'Kaukázusi jegenyefenyő',la:'Abies nordmanniana',fam:'Fenyőfélék',type:'tu',allas:'tu',szel:[],hab:[],alak:[],ter:['toboz'],jel:[],ctx:['varos'],mag:'20–30 m',lev:'2–3,5 cm (tű)',
+ short:'Sűrű, fényes, sötétzöld, puha tűk; a legnépszerűbb karácsonyfa.',
+ leaf:'Lapos, fényes, sötétzöld, puha tűk, előre és felfelé hajolva sűrűn borítják a hajtást; a fonákjukon két fehér sáv.',
+ bark:'Szürke, sokáig sima.',
+ fruit:'12–18 cm-es, felálló toboz, az ágon esik szét.',
+ habitat:'A Kaukázusból; kertekben, gyakran elültetett karácsonyfaként.',
+ tell:'Sűrűbb, fényesebb, előre hajló tűk; a közönséges jegenyefenyőé lazábban, fésűsen áll.',
+ g:{k:'fir',dense:true}}
 ];
+const EXTRA={
+ kocsanyos:{alak:['szarnyas-karejos'],ter:['makk'],ctx:['erdo','varos'],fajtak:'Oszlopos tölgy (Fastigiata): keskeny, oszlopos korona; parkokban, fasorokban gyakori.'},
+ kocsanytalan:{alak:['szarnyas-karejos'],ter:['makk']}, cser:{alak:['szarnyas-karejos'],ter:['makk']},
+ molyhos:{alak:['szarnyas-karejos'],ter:['makk'],jel:['ezust']}, 'magyar-tolgy':{alak:['szarnyas-karejos'],ter:['makk']},
+ bukk:{alak:['tojas'],ter:['dio'],jel:['voros'],ctx:['erdo','varos'],fajtak:'Vérbükk: egész nyáron bordó lombú; szomorú bükk: csüngő ágú. Parkokban, kertekben gyakoriak.'},
+ gyertyan:{alak:['tojas'],ter:['szarnyas'],ctx:['erdo','varos'],fajtak:'Oszlopos gyertyán (Fastigiata) fasorokban; nyírt sövényként is nagyon gyakori.'},
+ 'kislevelu-hars':{alak:['kerek'],ter:['szarnyas'],ctx:['erdo','varos']}, 'nagylevelu-hars':{alak:['kerek'],ter:['szarnyas'],ctx:['erdo','varos']},
+ ezusthars:{alak:['kerek'],ter:['szarnyas'],jel:['ezust'],ctx:['erdo','varos']},
+ 'mezei-juhar':{alak:['tenyeres'],ter:['szarnyas'],jel:['tejnedv'],ctx:['erdo','varos']},
+ 'korai-juhar':{alak:['tenyeres'],ter:['szarnyas'],jel:['tejnedv','voros'],ctx:['erdo','varos'],fajtak:'„Crimson King”: egész nyáron bordó lomb; „Globosum”: gömb koronás. Utcákon, fasorokban gyakoriak.'},
+ 'hegyi-juhar':{alak:['tenyeres'],ter:['szarnyas'],jel:['hamlo'],ctx:['erdo','varos']},
+ tatarjuhar:{alak:['tojas'],ter:['szarnyas']},
+ 'magas-koris':{alak:['keskeny'],ter:['szarnyas'],ctx:['erdo','varos']}, 'magyar-koris':{alak:['keskeny'],ter:['szarnyas']},
+ 'viragos-koris':{alak:['tojas'],ter:['szarnyas']},
+ 'mezei-szil':{alak:['tojas'],ter:['szarnyas']}, 'hegyi-szil':{alak:['tojas'],ter:['szarnyas']}, 'venic-szil':{alak:['tojas'],ter:['szarnyas']},
+ nyir:{alak:['harom'],ter:['egyeb'],jel:['feher'],ctx:['erdo','varos'],fajtak:'Csüngő ágú („Youngii”) és vörös lombú fajtái kertekben.'},
+ eger:{alak:['kerek'],ter:['toboz']},
+ 'feher-nyar':{alak:['tenyeres','kerek'],ter:['egyeb'],jel:['feher','ezust'],ctx:['erdo','varos']},
+ 'rezgo-nyar':{alak:['kerek'],ter:['egyeb']},
+ 'fekete-nyar':{alak:['harom'],ter:['egyeb'],ctx:['erdo','varos'],fajtak:'Jegenyenyár („Italica”): keskeny, oszlopos korona, utak és mezők mentén.'},
+ 'feher-fuz':{alak:['keskeny'],ter:['egyeb'],jel:['ezust']},
+ cseresznye:{alak:['tojas'],ter:['bogyo'],jel:['hamlo']},
+ vadkorte:{alak:['kerek'],ter:['bogyo'],jel:['tovis']},
+ barkoca:{alak:['tenyeres','szarnyas-karejos'],ter:['bogyo']},
+ madarberkenye:{alak:['keskeny'],ter:['bogyo'],ctx:['erdo','varos']},
+ 'lisztes-berkenye':{alak:['tojas'],ter:['bogyo'],jel:['ezust']},
+ 'erdei-fenyo':{ter:['toboz'],jel:['hamlo'],ctx:['erdo','varos']},
+ tiszafa:{ter:['bogyo'],ctx:['erdo','varos'],fajtak:'Kertekben és temetőkben gyakori, oszlopos és sárga levelű fajtákkal; nyírt sövénynek is ültetik.'},
+ platan:{alak:['tenyeres'],ter:['egyeb'],jel:['hamlo'],ctx:['varos']},
+ akac:{alak:['tojas'],ter:['huvely'],jel:['tovis'],ctx:['erdo','varos'],fajtak:'Gömbakác („Umbraculifera”): tövistelen, gömb koronás, nem virágzik; utcafásításban nagyon gyakori.'},
+ balvanyfa:{alak:['keskeny'],ter:['szarnyas'],jel:['illat'],ctx:['erdo','varos']},
+ 'zold-juhar':{alak:['tojas'],ter:['szarnyas'],ctx:['erdo','varos']},
+ 'voros-tolgy':{alak:['szarnyas-karejos'],ter:['makk'],ctx:['erdo','varos']},
+ ostorfa:{alak:['tojas'],ter:['bogyo'],ctx:['erdo','varos']},
+ feketefenyo:{ter:['toboz'],ctx:['erdo','varos']}, lucfenyo:{ter:['toboz'],ctx:['erdo','varos']},
+ vadgesztenye:{alak:['tojas','tenyeres'],ter:['dio'],ctx:['varos']},
+ 'fekete-dio':{alak:['keskeny'],ter:['dio'],jel:['illat'],ctx:['erdo','varos']},
+ dio:{alak:['tojas'],ter:['dio'],jel:['illat'],ctx:['varos','erdo']},
+ nemesnyar:{alak:['harom'],ter:['egyeb'],ctx:['erdo','varos']}
+};
+for(const t of T){const e=EXTRA[t.id]||{};for(const k of['alak','ter','jel','ctx'])if(!t[k])t[k]=e[k]||(k==='ctx'?['erdo']:[]);if(e.fajtak&&!t.fajtak)t.fajtak=e.fajtak}
+
 
 
 
@@ -881,6 +1258,9 @@ const REG=[
   p:['nyir','magyar-koris','kocsanytalan','mezei-juhar','ezusthars','tatarjuhar','vadkorte','feher-fuz','fekete-nyar','venic-szil','mezei-szil','cseresznye']}
 ];
 const REGMAP=Object.fromEntries(REG.map(r=>[r.k,r]));
+for(const r of REG)r.c.push('galagonya');
+const ADDP={'kecskefuz':['alpokalja','zala','bakony','dk','somogy','mecsek','matra','bukk','nyirseg'],'torekeny-fuz':['kisalfold','drava','duna','tisza','nyirseg','alpokalja','zala','somogy'],'vadalma':['zala','somogy','drava','duna','tisza','nyirseg','mecsek','matra','bukk','alpokalja'],'hazi-berkenye':['bakony','dk','mecsek','matra','bukk']};
+for(const[id,ks]of Object.entries(ADDP))for(const k of ks)REGMAP[k].p.push(id);
 const STATUS={};
 for(const r of REG){STATUS[r.k]={};for(const id of r.c)STATUS[r.k][id]=2;for(const id of r.p)STATUS[r.k][id]=STATUS[r.k][id]||1}
 
@@ -893,17 +1273,18 @@ function inHU(lon,lat){let c=false;for(let i=0,j=BORDER.length-1;i<BORDER.length
 
 /* ---------- Állapot ---------- */
 const S={region:null,pt:null,town:null};
+let CTX='erdo';try{CTX=localStorage.getItem('fafel-ctx')==='varos'?'varos':'erdo'}catch(e){}
 try{const sv=JSON.parse(localStorage.getItem('fafel-loc')||'null');if(sv&&REGMAP[sv.region]){S.region=sv.region;S.pt=sv.pt||null;S.town=sv.town||null}}catch(e){}
 function saveLoc(){try{localStorage.setItem('fafel-loc',JSON.stringify(S))}catch(e){}}
 const isNat=id=>!(T.find(t=>t.id===id)||{}).hasOwnProperty('nat');
-const st=id=>isNat(id)?(S.region?(STATUS[S.region][id]||0):null):null;
+const st=id=>isNat(id)&&CTX==='erdo'?(S.region?(STATUS[S.region][id]||0):null):null;
 const NNPILL='<span class="pill pn">nem őshonos</span>';
 const ST_TXT={2:'gyakori itt',1:'előfordul itt',0:'itt nem jellemző'};
 
 /* ---------- Kulcs ---------- */
-const F={type:null,allas:null,szel:null,hab:null,q:''};
+const F={type:null,allas:null,szel:null,hab:null,alak:null,ter:null,jel:null,q:''};
 const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
-function match(t,f){if(f.type&&t.type!==f.type)return false;if(f.allas&&t.allas!==f.allas)return false;if(f.szel&&!t.szel.includes(f.szel))return false;if(f.hab&&!t.hab.includes(f.hab))return false;if(f.q&&!norm(t.hu+' '+t.la+' '+t.fam).includes(norm(f.q)))return false;return true}
+function match(t,f){if(f.type&&t.type!==f.type)return false;if(f.allas&&t.allas!==f.allas)return false;if(f.szel&&!t.szel.includes(f.szel))return false;if(f.hab&&!t.hab.includes(f.hab))return false;if(f.alak&&!t.alak.includes(f.alak))return false;if(f.ter&&!t.ter.includes(f.ter))return false;if(f.jel&&!t.jel.includes(f.jel))return false;if(f.q&&!norm(t.hu+' '+t.la+' '+t.fam).includes(norm(f.q)))return false;return true}
 const byId=Object.fromEntries(T.map(t=>[t.id,t]));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -918,9 +1299,9 @@ const chipBoxes={};
 document.querySelectorAll('.chips').forEach(box=>{const key=box.dataset.f;chipBoxes[key]=box;
   for(const[v,l]of OPTS[key]){const c=document.createElement('button');c.type='button';c.className='chip';c.dataset.v=v;c.setAttribute('aria-pressed','false');c.innerHTML=`${l} <span class="c"></span>`;c.addEventListener('click',()=>{F[key]=F[key]===v?null:v;render()});box.appendChild(c)}});
 document.getElementById('q').addEventListener('input',e=>{F.q=e.target.value.trim();render()});
-document.getElementById('reset').addEventListener('click',()=>{F.type=F.allas=F.szel=F.hab=null;F.q='';document.getElementById('q').value='';render()});
+document.getElementById('reset').addEventListener('click',()=>{F.type=F.allas=F.szel=F.hab=F.alak=F.ter=F.jel=null;F.q='';document.getElementById('q').value='';render()});
 
-let showRare=false,visible=[];
+let showRare=false,showCity=false,visible=[];
 const resultsEl=document.getElementById('results');
 function group(title,sub,ids,dim){const g=document.createElement('div');g.className='group'+(dim?' dim':'');g.innerHTML=`<div class="group-h"><h3>${title}</h3><span>${sub}</span></div>`;const gr=document.createElement('div');gr.className='grid';ids.forEach(id=>gr.appendChild(cards[id]));g.appendChild(gr);return g}
 function render(){
@@ -928,28 +1309,47 @@ function render(){
   resultsEl.innerHTML='';
   for(const id of ids){const p=cards[id].querySelector('.pill');const s=st(id);if(!isNat(id)){p.hidden=false;p.className='pill pn';p.textContent='nem őshonos'}else if(s===null){p.hidden=true}else{p.hidden=false;p.className='pill p'+s;p.textContent=ST_TXT[s]}}
   const nn=ids.filter(id=>!isNat(id)),natIds=ids.filter(isNat);
-  if(!S.region){
-    const n=document.createElement('div');n.className='notice';n.innerHTML='<span>Adj meg helyszínt, és a lista előre veszi az ott jellemző fajokat.</span><button class="btn" type="button" data-openloc>Helyszín megadása</button>';resultsEl.appendChild(n);
-    if(natIds.length)resultsEl.appendChild(group('Őshonos fajok',`${natIds.length} faj`,natIds));
-    visible=[...natIds];
-  }else{
-    const g2=natIds.filter(id=>st(id)===2),g1=natIds.filter(id=>st(id)===1),g0=natIds.filter(id=>st(id)===0);
-    if(g2.length)resultsEl.appendChild(group('Ezen a tájon gyakori',`${g2.length} faj`,g2));
-    if(g1.length)resultsEl.appendChild(group('Előfordul, de ritkább',`${g1.length} faj`,g1));
-    if(g0.length){
-      if(showRare)resultsEl.appendChild(group('Ezen a tájon nem jellemző',`${g0.length} faj · ültetve vagy szórványosan azért előkerülhet`,g0,true));
-      const n=document.createElement('div');n.className='notice';n.innerHTML=`<span>${showRare?'A tájra nem jellemző fajok is látszanak.':`${g0.length} további faj ezen a tájon nem jellemző.`}</span><button class="btn" type="button" id="rareBtn">${showRare?'Elrejtés':'Megjelenítés'}</button>`;resultsEl.appendChild(n);
-      n.querySelector('#rareBtn').addEventListener('click',()=>{showRare=!showRare;render()});
+  const hasC=(id,c)=>byId[id].ctx.includes(c);
+  const toggle=(on,txtOn,txtOff,fn)=>{const n=document.createElement('div');n.className='notice';n.innerHTML=`<span>${on?txtOn:txtOff}</span><button class="btn" type="button">${on?'Elrejtés':'Megjelenítés'}</button>`;n.querySelector('button').addEventListener('click',fn);resultsEl.appendChild(n)};
+  if(CTX==='varos'){
+    const city=ids.filter(id=>hasC(id,'varos')),rest=ids.filter(id=>!hasC(id,'varos'));
+    if(city.length)resultsEl.appendChild(group('Településeken, parkokban gyakori',`${city.length} faj`,city));
+    visible=[...city];
+    if(rest.length){
+      if(showRare){resultsEl.appendChild(group('Inkább erdőben',`${rest.length} faj · településen ritkán látod`,rest,true));visible.push(...rest)}
+      toggle(showRare,'Az erdei fajok is látszanak.',`${rest.length} további faj inkább erdőben fordul elő.`,()=>{showRare=!showRare;render()});
     }
-    visible=[...g2,...g1,...(showRare?g0:[])];
+  }else{
+    if(!S.region){
+      const n=document.createElement('div');n.className='notice';n.innerHTML='<span>Adj meg helyszínt, és a lista előre veszi az ott jellemző fajokat.</span><button class="btn" type="button" data-openloc>Helyszín megadása</button>';resultsEl.appendChild(n);
+      if(natIds.length)resultsEl.appendChild(group('Őshonos fajok',`${natIds.length} faj`,natIds));
+      visible=[...natIds];
+    }else{
+      const g2=natIds.filter(id=>st(id)===2),g1=natIds.filter(id=>st(id)===1),g0=natIds.filter(id=>st(id)===0);
+      if(g2.length)resultsEl.appendChild(group('Ezen a tájon gyakori',`${g2.length} faj`,g2));
+      if(g1.length)resultsEl.appendChild(group('Előfordul, de ritkább',`${g1.length} faj`,g1));
+      if(g0.length){
+        if(showRare)resultsEl.appendChild(group('Ezen a tájon nem jellemző',`${g0.length} faj · ültetve vagy szórványosan azért előkerülhet`,g0,true));
+        const n=document.createElement('div');n.className='notice';n.innerHTML=`<span>${showRare?'A tájra nem jellemző fajok is látszanak.':`${g0.length} további faj ezen a tájon nem jellemző.`}</span><button class="btn" type="button" id="rareBtn">${showRare?'Elrejtés':'Megjelenítés'}</button>`;resultsEl.appendChild(n);
+        n.querySelector('#rareBtn').addEventListener('click',()=>{showRare=!showRare;render()});
+      }
+      visible=[...g2,...g1,...(showRare?g0:[])];
+    }
+    const nnF=nn.filter(id=>hasC(id,'erdo')),nnC=nn.filter(id=>!hasC(id,'erdo'));
+    if(nnF.length){resultsEl.appendChild(group('Nem őshonos, erdőben is előfordul',`${nnF.length} faj · ültetett vagy kivadult`,nnF));visible.push(...nnF)}
+    if(nnC.length){
+      if(showCity){resultsEl.appendChild(group('Parkokban, kertekben ültetett fajok',`${nnC.length} faj · erdőben ritkán`,nnC,true));visible.push(...nnC)}
+      toggle(showCity,'A parki, kerti fajok is látszanak.',`${nnC.length} parki, kerti faj erdőben nem jellemző.`,()=>{showCity=!showCity;render()});
+    }
   }
-  if(nn.length){resultsEl.appendChild(group('Nem őshonos fajok',`${nn.length} faj · ültetett vagy kivadult, sok erdőben előfordul`,nn));visible.push(...nn)}
   if(!ids.length){const e=document.createElement('div');e.className='notice';e.innerHTML='<span>Ezekkel a jegyekkel nincs találat. Lehet, hogy egy válasz bizonytalan volt: vonj vissza egyet a kulcsban.</span>';resultsEl.appendChild(e)}
   document.getElementById('cnt').textContent=ids.length;
   document.getElementById('cntTxt').textContent=ids.length===T.length?'faj':'faj felel meg';
   for(const key in chipBoxes)chipBoxes[key].querySelectorAll('.chip').forEach(c=>{const v=c.dataset.v,on=F[key]===v;c.setAttribute('aria-pressed',on);const n=T.filter(t=>match(t,{...F,[key]:v})).length;c.querySelector('.c').textContent=n;c.disabled=!on&&n===0});
 }
 document.addEventListener('click',e=>{if(e.target.closest('[data-openloc]'))openLoc()});
+function setCtx(c){CTX=c;try{localStorage.setItem('fafel-ctx',c)}catch(e){}document.querySelectorAll('[data-ctx]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ctx===c));const hs=document.getElementById('habStep');hs.hidden=c==='varos';if(c==='varos')F.hab=null;showRare=false;render()}
+document.querySelectorAll('[data-ctx]').forEach(b=>b.addEventListener('click',()=>setCtx(b.dataset.ctx)));
 
 /* ---------- Fülek ---------- */
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
@@ -991,6 +1391,7 @@ function openDetail(id){
       ${t.bud?`<div><dt>rügy, hajtás</dt><dd>${t.bud}</dd></div>`:''}
       <div><dt>virág és termés</dt><dd>${t.fruit}</dd></div>
       <div><dt>élőhely</dt><dd>${t.habitat}</dd></div>
+      ${t.fajtak?`<div><dt>gyakori fajták</dt><dd>${t.fajtak}</dd></div>`:''}
       ${isNat(id)?`<div><dt>tájegységek, ahol gyakori</dt><dd>${where.length?where.join(', '):'Sehol sem gyakori; szórványos vagy ritka faj.'}</dd></div>`:`<div><dt>státusz</dt><dd>Nem őshonos${t.inv?', invazív: terjed és kiszorítja a hazai fajokat. Ültetni nem ajánlott.':'; ültetve bárhol előfordulhat.'}</dd></div>`}
     </dl>
     <div class="tell"><b>Így ismered fel</b>${t.tell}</div>
@@ -1129,6 +1530,7 @@ A többi őshonos faj itt nem jellemző; a nem őshonos fajok ültetve bárhol e
   const note=pnote.value.trim();
   const prompt=`Fafaj-felismerő vagy egy magyarországi terepi alkalmazásban. ${files.length?`A felhasználó ${files.length} fotót küldött egy fáról (levél, kéreg, termés, rügy vagy az egész fa).`:'A felhasználó nem küldött fotót, csak leírást.'}
 ${loc}
+A felhasználó most ${CTX==='varos'?'településen, parkban vagy kertben':'erdőben vagy természetközeli területen'} van.
 ${note?'A felhasználó megjegyzése: '+note:''}
 
 Az alkalmazás fajlistája (azonosító: magyar név (latin név)):
@@ -1181,7 +1583,7 @@ function showResult(res){
 /* ---------- Offline működés ---------- */
 if('serviceWorker' in navigator&&location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 
-updKeyUI();updateLocUI();render();
+updKeyUI();updateLocUI();setCtx(CTX);
 
 </script>
 </body>
